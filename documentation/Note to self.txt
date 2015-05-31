@@ -1,0 +1,4 @@
+The protected member section of each class was hidden not by a Doxyfile setting
+but by commenting the "<protectedattributes title="Protected Members"/>" section
+in qtlayout.xml
+

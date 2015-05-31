@@ -1,0 +1,6 @@
+# Ignore all export test output formats:
+
+/*.jpg
+/*.jpeg
+/*.png
+/*.pdf
