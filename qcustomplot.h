@@ -3610,7 +3610,7 @@ public:
   
 protected:
   enum AnchorIndex {aiTop, aiTopRight, aiRight, aiBottom, aiBottomLeft, aiLeft};
-  
+
   // property members:
   QPixmap mPixmap;
   QPixmap mScaledPixmap;
@@ -3618,7 +3618,7 @@ protected:
   Qt::AspectRatioMode mAspectRatioMode;
   Qt::TransformationMode mTransformationMode;
   QPen mPen, mSelectedPen;
-  
+
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual QPointF anchorPixelPoint(int anchorId) const;

@@ -19,7 +19,7 @@ pyqt_sip_dir = '/usr/share/python3-sip/PyQt5'
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
-os.system(" ".join([config.sip_bin, "-c", ".", "-b", build_file, "-I", pyqt_sip_dir, "-I /usr/include/qt5/",  pyqt_sip_flags, "qcustomplot.sip"]))
+os.system(" ".join([config.sip_bin, "-c", ".", "-b", build_file, "-I", pyqt_sip_dir,  pyqt_sip_flags, "qcustomplot.sip"]))
 
 # We are going to install the SIP specification file for this module and
 # its configuration module.
@@ -46,9 +46,9 @@ if config.platform.startswith('win32'):
     makefile.generator = "NMAKE"
 else:
     libname = 'qcustomplot'
-makefile.extra_include_dirs = ['/usr/include/qt5/']
+makefile.extra_include_dirs = ['/usr/include/', '/usr/include/qt5', '/usr/include/qt5/QtCore', '/usr/include/qt5/QtWidgets', '/usr/include/qt5/QtGui', '/usr/include/qt5/QtPrintSupport']
 makefile.extra_libs = [libname]
-makefile.extra_lib_dirs = ["."]
+makefile.extra_lib_dirs = ["/usr/lib64/"]
 
 # Generate the Makefile itself.
 makefile.generate()

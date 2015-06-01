@@ -1,26 +1,27 @@
-///***************************************************************************
-//**                                                                        **
-//**  QCustomPlot, a simple to use, modern plotting widget for Qt           **
-//**  Copyright (C) 2011, 2012 Emanuel Eichhammer                           **
-//**                                                                        **
-//**  This program is free software: you can redistribute it and/or modify  **
-//**  it under the terms of the GNU General Public License as published by  **
-//**  the Free Software Foundation, either version 3 of the License, or     **
-//**  (at your option) any later version.                                   **
-//**                                                                        **
-//**  This program is distributed in the hope that it will be useful,       **
-//**  but WITHOUT ANY WARRANTY; without even the implied warranty of        **
-//**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         **
-//**  GNU General Public License for more details.                          **
-//**                                                                        **
-//**  You should have received a copy of the GNU General Public License     **
-//**  along with this program.  If not, see http://www.gnu.org/licenses/.   **
-//**                                                                        **
-//****************************************************************************
-//**           Author: Emanuel Eichhammer                                   **
-//**  Website/Contact: http://www.WorksLikeClockwork.com/                   **
-//**             Date: 09.06.12                                             **
-//****************************************************************************/
+/***************************************************************************
+**                                                                        **
+**  QCustomPlot, an easy to use, modern plotting widget for Qt            **
+**  Copyright (C) 2011-2015 Emanuel Eichhammer                            **
+**                                                                        **
+**  This program is free software: you can redistribute it and/or modify  **
+**  it under the terms of the GNU General Public License as published by  **
+**  the Free Software Foundation, either version 3 of the License, or     **
+**  (at your option) any later version.                                   **
+**                                                                        **
+**  This program is distributed in the hope that it will be useful,       **
+**  but WITHOUT ANY WARRANTY; without even the implied warranty of        **
+**  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         **
+**  GNU General Public License for more details.                          **
+**                                                                        **
+**  You should have received a copy of the GNU General Public License     **
+**  along with this program.  If not, see http://www.gnu.org/licenses/.   **
+**                                                                        **
+****************************************************************************
+**           Author: Emanuel Eichhammer                                   **
+**  Website/Contact: http://www.qcustomplot.com/                          **
+**             Date: 25.04.15                                             **
+**          Version: 1.3.1                                                **
+****************************************************************************/
 
 %Module qcustomplot
 %Import QtGui/QtGuimod.sip
@@ -29,7 +30,7 @@
 namespace QCP
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 enum MarginSide { msLeft     = 0x01 ///< <tt>0x01</tt> left margin
@@ -85,20 +86,12 @@ bool isInvalidData(double value1, double value2);
 void setMarginValue(QMargins &margins, QCP::MarginSide side, int value);
 int getMarginValue(const QMargins &margins, QCP::MarginSide side);
 };
-//Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::AntialiasedElements)
-//Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::PlottingHints)
-//Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::MarginSides)
-//Q_DECLARE_OPERATORS_FOR_FLAGS(QCP::Interactions)
-//QFlags<QCP::AntialiasedElements::Flag> operator|(QCP::AntialiasedElements::Flag f1, QFlags<QCP::AntialiasedElements::Flag> f2);
-//QFlags<QCP::PlottingHints::Flag> operator|(QCP::PlottingHints::Flag f1, QFlags<QCP::PlottingHints::Flag> f2);
-//QFlags<QCP::MarginSides::Flag> operator|(QCP::MarginSides::Flag f1, QFlags<QCP::MarginSides::Flag> f2);
-//QFlags<QCP::Interactions::Flag> operator|(QCP::Interactions::Flag f1, QFlags<QCP::Interactions> f2);
 
 
 class QCPScatterStyle
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -158,7 +151,7 @@ public:
 class QCPPainter : public QPainter
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -167,7 +160,6 @@ public:
                      ,pmNoCaching    = 0x02   ///< <tt>0x02</tt> Mode for all sorts of exports (e.g. PNG, PDF,...). For example, this prevents using cached pixmap labels
                      ,pmNonCosmetic  = 0x04   ///< <tt>0x04</tt> Turns pen widths 0 to 1, i.e. disables cosmetic pens. (A cosmetic pen is always drawn with width 1 pixel in the vector image/pdf viewer, independent of zoom.)
                    };
-//  Q_DECLARE_FLAGS(PainterModes, PainterMode)
   typedef QFlags<PainterMode> PainterModes;
 
   QCPPainter();
@@ -196,13 +188,12 @@ public:
   // non-virtual methods:
   void makeNonCosmetic();
 };
-//Q_DECLARE_OPERATORS_FOR_FLAGS(QCPPainter::PainterModes)
 
 
 class  QCPLayer
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -228,7 +219,7 @@ protected:
 class  QCPLayerable : public QObject
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -279,7 +270,7 @@ protected:
 class  QCPRange
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -308,7 +299,7 @@ public:
 class QCPMarginGroup : public QObject
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -331,7 +322,7 @@ protected:
 class QCPLayoutElement : public QCPLayerable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -396,7 +387,7 @@ protected:
 class QCPLayout : public QCPLayoutElement
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -433,7 +424,7 @@ protected:
 class QCPLayoutGrid : public QCPLayout
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -485,7 +476,7 @@ protected:
 class QCPLayoutInset : public QCPLayout
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -518,20 +509,13 @@ public:
   // non-virtual methods:
   void addElement(QCPLayoutElement *element, Qt::Alignment alignment);
   void addElement(QCPLayoutElement *element, const QRectF &rect);
-
-public:
-  // property members:
-  QList<QCPLayoutElement*> mElements;
-  QList<InsetPlacement> mInsetPlacement;
-  QList<Qt::Alignment> mInsetAlignment;
-  QList<QRectF> mInsetRect;
 };
 
 
 class QCPLineEnding
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -580,7 +564,7 @@ public:
 class QCPGrid : public QCPLayerable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -627,7 +611,7 @@ protected:
 class QCPAxis : public QCPLayerable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -636,6 +620,8 @@ public:
                   ,atTop    = 0x04  ///< <tt>0x04</tt> Axis is horizontal and on the top side of the axis rect
                   ,atBottom = 0x08  ///< <tt>0x08</tt> Axis is horizontal and on the bottom side of the axis rect
                 };
+//  Q_DECLARE_FLAGS(AxisTypes, AxisType)
+  typedef QFlags<AxisType> AxisTypes;
   enum LabelType { ltNumber    ///< Tick coordinate is regarded as normal number and will be displayed as such. (see \ref setNumberFormat)
                    ,ltDateTime ///< Tick coordinate is regarded as a date/time (seconds since 1970-01-01T00:00:00 UTC) and will be displayed and formatted as such. (for details, see \ref setDateTimeFormat)
                  };
@@ -827,7 +813,7 @@ protected:
 class QCPAxisPainterPrivate
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -875,31 +861,32 @@ public:
   QVector<QString> tickLabels;
 
 protected:
-  struct TickLabelData
-  {
-    QString basePart;
-    QString expPart;
-    QRect baseBounds;
-    QRect expBounds;
-    QRect totalBounds;
-    QRect rotatedTotalBounds;
-    QFont baseFont;
-    QFont expFont;
-  };
+//TODO: Изменить
+//  struct TickLabelData
+//  {
+//    QString basePart;
+//    QString expPart;
+//    QRect baseBounds;
+//    QRect expBounds;
+//    QRect totalBounds;
+//    QRect rotatedTotalBounds;
+//    QFont baseFont;
+//    QFont expFont;
+//  };
   virtual QByteArray generateLabelParameterHash() const;
 
   virtual void placeTickLabel(QCPPainter *painter, double position, int distanceToAxis, const QString &text, QSize *tickLabelsSize);
-  virtual void drawTickLabel(QCPPainter *painter, double x, double y, const TickLabelData &labelData) const;
-  virtual TickLabelData getTickLabelData(const QFont &font, const QString &text) const;
-  virtual QPointF getTickLabelDrawOffset(const TickLabelData &labelData) const;
+//  virtual void drawTickLabel(QCPPainter *painter, double x, double y, const TickLabelData &labelData) const;
+//  virtual TickLabelData getTickLabelData(const QFont &font, const QString &text) const;
+//  virtual QPointF getTickLabelDrawOffset(const TickLabelData &labelData) const;
   virtual void getMaxTickLabelSize(const QFont &font, const QString &text, QSize *tickLabelsSize) const;
 };
 
 
-class QCPAbstractPlottable : public QCPLayerable
+class QCPAbstractPlottable : public QCPLayerable /Abstract/
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -948,12 +935,6 @@ signals:
   void selectionChanged(bool selected);
   void selectableChanged(bool selectable);
 
-public:
-  enum SignDomain { sdNegative  ///< The negative sign domain, i.e. numbers smaller than zero
-                    ,sdBoth     ///< Both sign domains, including zero, i.e. all (rational) numbers
-                    ,sdPositive ///< The positive sign domain, i.e. numbers greater than zero
-                  };
-
 protected:
   // reimplemented virtual methods:
   virtual QRect clipRect() const;
@@ -966,8 +947,8 @@ protected:
 
   // introduced virtual methods:
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const = 0;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
 
   // non-virtual methods:
 //  void coordsToPixels(double key, double value, double &x, double &y) const;
@@ -986,7 +967,7 @@ protected:
 class QCPItemAnchor
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1022,6 +1003,10 @@ protected:
 
 class QCPItemPosition : public QCPItemAnchor
 {
+%TypeHeaderCode
+#include <qcustomplot.h>
+%End
+
 public:
   enum PositionType { ptAbsolute        ///< Static positioning in pixels, starting from the top left corner of the viewport/widget.
                       ,ptViewportRatio  ///< Static positioning given by a fraction of the viewport size. For example, if you call setCoords(0, 0), the position will be at the top
@@ -1070,10 +1055,10 @@ protected:
 };
 
 
-class QCPAbstractItem : public QCPLayerable
+class QCPAbstractItem : public QCPLayerable /Abstract/
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1130,7 +1115,7 @@ protected:
 class QCustomPlot : public QWidget
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1297,11 +1282,10 @@ protected:
   void drawBackground(QCPPainter *painter);
 };
 
-
 class QCPColorGradient
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1327,13 +1311,15 @@ public:
 
   // getters:
   int levelCount() const;
-  QMap<double, QColor> colorStops() const;
+// TODO: Реализовать корректню сигнатуру
+//  QMap<double, QColor> colorStops() const;
   ColorInterpolation colorInterpolation() const;
   bool periodic() const;
 
   // setters:
   void setLevelCount(int n);
-  void setColorStops(const QMap<double, QColor> &colorStops);
+// TODO: аналогично предыдущему
+//  void setColorStops(const QMap<double, QColor> &colorStops);
   void setColorStopAt(double position, const QColor &color);
   void setColorInterpolation(ColorInterpolation interpolation);
   void setPeriodic(bool enabled);
@@ -1353,7 +1339,7 @@ protected:
 class QCPAxisRect : public QCPLayoutElement
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1433,10 +1419,10 @@ protected:
 };
 
 
-class QCPAbstractLegendItem : public QCPLayoutElement
+class QCPAbstractLegendItem : public QCPLayoutElement /Abstract/
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1466,16 +1452,6 @@ signals:
   void selectionChanged(bool selected);
   void selectableChanged(bool selectable);
 
-public:
-  // property members:
-  QCPLegend *mParentLegend;
-  QFont mFont;
-  QColor mTextColor;
-  QFont mSelectedFont;
-  QColor mSelectedTextColor;
-  bool mSelectable;
-  bool mSelected;
-
 protected:
   // reimplemented virtual methods:
   virtual QCP::Interaction selectionCategory() const;
@@ -1491,7 +1467,7 @@ protected:
 class QCPPlottableLegendItem : public QCPAbstractLegendItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1499,10 +1475,6 @@ public:
 
   // getters:
   QCPAbstractPlottable *plottable();
-
-public:
-  // property members:
-  QCPAbstractPlottable *mPlottable;
 
 protected:
   // reimplemented virtual methods:
@@ -1519,7 +1491,7 @@ protected:
 class QCPLegend : public QCPLayoutGrid
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1585,23 +1557,6 @@ signals:
   void selectionChanged(QCPLegend::SelectableParts parts);
   void selectableChanged(QCPLegend::SelectableParts parts);
 
-public:
-  // property members:
-  QPen mBorderPen;
-  QPen mIconBorderPen;
-  QBrush mBrush;
-  QFont mFont;
-  QColor mTextColor;
-  QSize mIconSize;
-  int mIconTextPadding;
-  SelectableParts mSelectedParts;
-  SelectableParts mSelectableParts;
-  QPen mSelectedBorderPen;
-  QPen mSelectedIconBorderPen;
-  QBrush mSelectedBrush;
-  QFont mSelectedFont;
-  QColor mSelectedTextColor;
-
 protected:
   // reimplemented virtual methods:
   virtual void parentPlotInitialized(QCustomPlot *parentPlot);
@@ -1621,7 +1576,7 @@ protected:
 class QCPPlotTitle : public QCPLayoutElement
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1653,17 +1608,6 @@ signals:
   void selectionChanged(bool selected);
   void selectableChanged(bool selectable);
 
-public:
-  // property members:
-  QString mText;
-  QFont mFont;
-  QColor mTextColor;
-  QFont mSelectedFont;
-  QColor mSelectedTextColor;
-  QRect mTextBoundingRect;
-  bool mSelectable;
-  bool mSelected;
-
 protected:
   // reimplemented virtual methods:
   virtual void applyDefaultAntialiasingHint(QCPPainter *painter) const;
@@ -1683,14 +1627,11 @@ protected:
 class QCPColorScaleAxisRectPrivate : public QCPAxisRect
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
   explicit QCPColorScaleAxisRectPrivate(QCPColorScale *parentColorScale);
-  QCPColorScale *mParentColorScale;
-  QImage mGradientImage;
-  bool mGradientImageInvalidated;
 protected:
 //  re-using some methods of QCPAxisRect to make them available to friend class QCPColorScale
 //  using QCPAxisRect::calculateAutoMargin;
@@ -1709,7 +1650,7 @@ protected:
 class QCPColorScale : public QCPLayoutElement
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1763,7 +1704,7 @@ protected:
 class QCPData
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1784,6 +1725,10 @@ typedef QMutableMapIterator<double, QCPData> QCPDataMutableMapIterator;
 
 class QCPGraph : public QCPAbstractPlottable
 {
+%TypeHeaderCode
+#include <qcustomplot.h>
+%End
+
 public:
   enum LineStyle { lsNone        ///< data points are not connected with any lines (e.g. data only represented
                                  ///< with symbols according to the scatter style, see \ref setScatterStyle)
@@ -1803,7 +1748,8 @@ public:
   virtual ~QCPGraph();
 
   // getters:
-  QCPDataMap *data() const;
+  //TODO: Реализовать корректную сигнатуру
+  //QCPDataMap *data() const;
   LineStyle lineStyle() const;
   QCPScatterStyle scatterStyle() const;
   ErrorType errorType() const;
@@ -1814,7 +1760,8 @@ public:
   bool adaptiveSampling() const;
 
   // setters:
-  void setData(QCPDataMap *data, bool copy=false);
+  //TODO: Аналогично
+  //void setData(QCPDataMap *data, bool copy=false);
   void setData(const QVector<double> &key, const QVector<double> &value);
   void setDataKeyError(const QVector<double> &key, const QVector<double> &value, const QVector<double> &keyError);
   void setDataKeyError(const QVector<double> &key, const QVector<double> &value, const QVector<double> &keyErrorMinus, const QVector<double> &keyErrorPlus);
@@ -1832,7 +1779,8 @@ public:
   void setAdaptiveSampling(bool enabled);
 
   // non-property methods:
-  void addData(const QCPDataMap &dataMap);
+  //TODO: Аналогично
+  //void addData(const QCPDataMap &dataMap);
   void addData(const QCPData &data);
   void addData(double key, double value);
   void addData(const QVector<double> &keys, const QVector<double> &values);
@@ -1855,10 +1803,10 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
 
   // introduced virtual methods:
   virtual void drawFill(QCPPainter *painter, QVector<QPointF> *lineData) const;
@@ -1876,8 +1824,9 @@ protected:
   void getStepCenterPlotData(QVector<QPointF> *linePixelData, QVector<QCPData> *scatterData) const;
   void getImpulsePlotData(QVector<QPointF> *linePixelData, QVector<QCPData> *scatterData) const;
   void drawError(QCPPainter *painter, double x, double y, const QCPData &data) const;
-  void getVisibleDataBounds(QCPDataMap::const_iterator &lower, QCPDataMap::const_iterator &upper) const;
-  int countDataInBounds(const QCPDataMap::const_iterator &lower, const QCPDataMap::const_iterator &upper, int maxCount) const;
+//TODO: реализовать корректную сигнатуру
+//  void getVisibleDataBounds(QCPDataMap::const_iterator &lower, QCPDataMap::const_iterator &upper) const;
+//  int countDataInBounds(const QCPDataMap::const_iterator &lower, const QCPDataMap::const_iterator &upper, int maxCount) const;
   void addFillBasePoints(QVector<QPointF> *lineData) const;
   void removeFillBasePoints(QVector<QPointF> *lineData) const;
   QPointF lowerFillBasePoint(double lowerKey) const;
@@ -1894,7 +1843,7 @@ protected:
 class QCPCurveData
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1914,7 +1863,7 @@ typedef QMutableMapIterator<double, QCPCurveData> QCPCurveDataMutableMapIterator
 class QCPCurve : public QCPAbstractPlottable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -1925,19 +1874,22 @@ public:
   virtual ~QCPCurve();
 
   // getters:
-  QCPCurveDataMap *data() const;
+  //TODO: реализовать корректную сигнатуру
+  //QCPCurveDataMap *data() const;
   QCPScatterStyle scatterStyle() const;
   LineStyle lineStyle() const;
 
   // setters:
-  void setData(QCPCurveDataMap *data, bool copy=false);
+  //TODO: Аналогично
+  //void setData(QCPCurveDataMap *data, bool copy=false);
   void setData(const QVector<double> &t, const QVector<double> &key, const QVector<double> &value);
   void setData(const QVector<double> &key, const QVector<double> &value);
   void setScatterStyle(const QCPScatterStyle &style);
   void setLineStyle(LineStyle style);
 
   // non-property methods:
-  void addData(const QCPCurveDataMap &dataMap);
+  //TODO: Аналогично
+  //void addData(const QCPCurveDataMap &dataMap);
   void addData(const QCPCurveData &data);
   void addData(double t, double key, double value);
   void addData(double key, double value);
@@ -1955,8 +1907,8 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // introduced virtual methods:
   virtual void drawScatterPlot(QCPPainter *painter, const QVector<QPointF> *pointData) const;
@@ -1976,7 +1928,7 @@ protected:
 class QCPBarsGroup : public QObject
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2006,13 +1958,6 @@ public:
   void insert(int i, QCPBars *bars);
   void remove(QCPBars *bars);
 
-public:
-  // non-property members:
-  QCustomPlot *mParentPlot;
-  SpacingType mSpacingType;
-  double mSpacing;
-  QList<QCPBars*> mBars;
-
 protected:
   // non-virtual methods:
   void registerBars(QCPBars *bars);
@@ -2027,7 +1972,7 @@ protected:
 class QCPBarData
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2046,7 +1991,7 @@ typedef QMutableMapIterator<double, QCPBarData> QCPBarDataMutableMapIterator;
 class QCPBars : public QCPAbstractPlottable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2065,20 +2010,23 @@ public:
   double baseValue() const;
   QCPBars *barBelow() const;
   QCPBars *barAbove() const;
-  QCPBarDataMap *data() const;
+//TODO: Реализовать корректную сигнатуру
+//  QCPBarDataMap *data() const;
 
   // setters:
   void setWidth(double width);
   void setWidthType(WidthType widthType);
   void setBarsGroup(QCPBarsGroup *barsGroup);
   void setBaseValue(double baseValue);
-  void setData(QCPBarDataMap *data, bool copy=false);
+//TODO: Аналогично
+//  void setData(QCPBarDataMap *data, bool copy=false);
   void setData(const QVector<double> &key, const QVector<double> &value);
 
   // non-property methods:
   void moveBelow(QCPBars *bars);
   void moveAbove(QCPBars *bars);
-  void addData(const QCPBarDataMap &dataMap);
+//TODO: Аналогично
+//  void addData(const QCPBarDataMap &dataMap);
   void addData(const QCPBarData &data);
   void addData(double key, double value);
   void addData(const QVector<double> &keys, const QVector<double> &values);
@@ -2095,11 +2043,12 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // non-virtual methods:
-  void getVisibleDataBounds(QCPBarDataMap::const_iterator &lower, QCPBarDataMap::const_iterator &upperEnd) const;
+//TODO: Реализовать корректную сигнатуру
+//  void getVisibleDataBounds(QCPBarDataMap::const_iterator &lower, QCPBarDataMap::const_iterator &upperEnd) const;
   QPolygonF getBarPolygon(double key, double value) const;
   void getPixelWidth(double key, double &lower, double &upper) const;
   double getStackedBaseValue(double key, bool positive) const;
@@ -2110,7 +2059,7 @@ protected:
 class QCPStatisticalBox : public QCPAbstractPlottable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2151,28 +2100,12 @@ public:
   virtual void clearData();
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-public:
-  // property members:
-  QVector<double> mOutliers;
-  double mKey;
-  double mMinimum;
-  double mLowerQuartile;
-  double mMedian;
-  double mUpperQuartile;
-  double mMaximum;
-  double mWidth;
-  double mWhiskerWidth;
-  QPen mWhiskerPen;
-  QPen mWhiskerBarPen;
-  QPen mMedianPen;
-  QCPScatterStyle mOutlierStyle;
-
 protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // introduced virtual methods:
   virtual void drawQuartileBox(QCPPainter *painter, QRectF *quartileBox=0) const;
@@ -2185,7 +2118,7 @@ protected:
 class QCPColorMapData
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2226,7 +2159,7 @@ public:
 class QCPColorMap : public QCPAbstractPlottable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2271,15 +2204,15 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 };
 
 
 class QCPFinancialData
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2301,7 +2234,7 @@ typedef QMutableMapIterator<double, QCPFinancialData> QCPFinancialDataMutableMap
 class QCPFinancial : public QCPAbstractPlottable
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2313,7 +2246,8 @@ public:
   virtual ~QCPFinancial();
 
   // getters:
-  QCPFinancialDataMap *data() const;
+  //TODO: Реализовать корректную сигнатуру
+  //QCPFinancialDataMap *data() const;
   ChartStyle chartStyle() const;
   double width() const;
   bool twoColored() const;
@@ -2323,7 +2257,8 @@ public:
   QPen penNegative() const;
 
   // setters:
-  void setData(QCPFinancialDataMap *data, bool copy=false);
+  //TODO: Аналогично
+  //void setData(QCPFinancialDataMap *data, bool copy=false);
   void setData(const QVector<double> &key, const QVector<double> &open, const QVector<double> &high, const QVector<double> &low, const QVector<double> &close);
   void setChartStyle(ChartStyle style);
   void setWidth(double width);
@@ -2334,7 +2269,8 @@ public:
   void setPenNegative(const QPen &pen);
 
   // non-property methods:
-  void addData(const QCPFinancialDataMap &dataMap);
+  //TODO: Аналогично
+  //void addData(const QCPFinancialDataMap &dataMap);
   void addData(const QCPFinancialData &data);
   void addData(double key, double open, double high, double low, double close);
   void addData(const QVector<double> &key, const QVector<double> &open, const QVector<double> &high, const QVector<double> &low, const QVector<double> &close);
@@ -2348,28 +2284,30 @@ public:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
   // static methods:
-  static QCPFinancialDataMap timeSeriesToOhlc(const QVector<double> &time, const QVector<double> &value, double timeBinSize, double timeBinOffset = 0);
+  //TODO: Аналогично
+  //static QCPFinancialDataMap timeSeriesToOhlc(const QVector<double> &time, const QVector<double> &value, double timeBinSize, double timeBinOffset = 0);
 
 protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // non-virtual methods:
-  void drawOhlcPlot(QCPPainter *painter, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end);
-  void drawCandlestickPlot(QCPPainter *painter, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end);
-  double ohlcSelectTest(const QPointF &pos, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end) const;
-  double candlestickSelectTest(const QPointF &pos, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end) const;
-  void getVisibleDataBounds(QCPFinancialDataMap::const_iterator &lower, QCPFinancialDataMap::const_iterator &upper) const;
+//TODO: Аналогично
+//  void drawOhlcPlot(QCPPainter *painter, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end);
+//  void drawCandlestickPlot(QCPPainter *painter, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end);
+//  double ohlcSelectTest(const QPointF &pos, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end) const;
+//  double candlestickSelectTest(const QPointF &pos, const QCPFinancialDataMap::const_iterator &begin, const QCPFinancialDataMap::const_iterator &end) const;
+//  void getVisibleDataBounds(QCPFinancialDataMap::const_iterator &lower, QCPFinancialDataMap::const_iterator &upper) const;
 };
 
 
 class QCPItemStraightLine : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2387,12 +2325,21 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const point1;
-  QCPItemPosition * const point2;
-
-  // property members:
-  QPen mPen;
-  QPen mSelectedPen;
+//  QCPItemPosition * const point1;
+//  QCPItemPosition * const point2;
+  //Removed const! for SIP
+  QCPItemPosition *point1
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *point2
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2408,7 +2355,7 @@ protected:
 class QCPItemLine : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2430,14 +2377,21 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const start;
-  QCPItemPosition * const end;
-
-  // property members:
-  QPen mPen;
-  QPen mSelectedPen;
-  QCPLineEnding mHead;
-  QCPLineEnding mTail;
+//  QCPItemPosition * const start;
+//  QCPItemPosition * const end;
+  //Removed const! for SIP
+  QCPItemPosition *start
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *end
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2452,7 +2406,7 @@ protected:
 class QCPItemCurve : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2474,16 +2428,35 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const start;
-  QCPItemPosition * const startDir;
-  QCPItemPosition * const endDir;
-  QCPItemPosition * const end;
-
-  // property members:
-  QPen mPen;
-  QPen mSelectedPen;
-  QCPLineEnding mHead;
-  QCPLineEnding mTail;
+//  QCPItemPosition * const start;
+//  QCPItemPosition * const startDir;
+//  QCPItemPosition * const endDir;
+//  QCPItemPosition * const end;
+  //Removed const! for SIP
+  QCPItemPosition *start
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *startDir
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *endDir
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *end
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2497,7 +2470,7 @@ protected:
 class QCPItemRect : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2519,24 +2492,63 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const topLeft;
-  QCPItemPosition * const bottomRight;
-  QCPItemAnchor * const top;
-  QCPItemAnchor * const topRight;
-  QCPItemAnchor * const right;
-  QCPItemAnchor * const bottom;
-  QCPItemAnchor * const bottomLeft;
-  QCPItemAnchor * const left;
-
-protected:
-  enum AnchorIndex {aiTop, aiTopRight, aiRight, aiBottom, aiBottomLeft, aiLeft};
-
-public:
-  // property members:
-  QPen mPen;
-  QPen mSelectedPen;
-  QBrush mBrush;
-  QBrush mSelectedBrush;
+//  QCPItemPosition * const topLeft;
+//  QCPItemPosition * const bottomRight;
+//  QCPItemAnchor * const top;
+//  QCPItemAnchor * const topRight;
+//  QCPItemAnchor * const right;
+//  QCPItemAnchor * const bottom;
+//  QCPItemAnchor * const bottomLeft;
+//  QCPItemAnchor * const left;
+  //Removed const! for SIP
+  QCPItemPosition *topLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *bottomRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *top
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *topRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *right
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottom
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottomLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *left
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2552,7 +2564,7 @@ protected:
 class QCPItemText : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2592,34 +2604,69 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const position;
-  QCPItemAnchor * const topLeft;
-  QCPItemAnchor * const top;
-  QCPItemAnchor * const topRight;
-  QCPItemAnchor * const right;
-  QCPItemAnchor * const bottomRight;
-  QCPItemAnchor * const bottom;
-  QCPItemAnchor * const bottomLeft;
-  QCPItemAnchor * const left;
-
-protected:
-  enum AnchorIndex {aiTopLeft, aiTop, aiTopRight, aiRight, aiBottomRight, aiBottom, aiBottomLeft, aiLeft};
-
-public:
-  // property members:
-  QColor mColor;
-  QColor mSelectedColor;
-  QPen mPen;
-  QPen mSelectedPen;
-  QBrush mBrush;
-  QBrush mSelectedBrush;
-  QFont mFont;
-  QFont mSelectedFont;
-  QString mText;
-  Qt::Alignment mPositionAlignment;
-  Qt::Alignment mTextAlignment;
-  double mRotation;
-  QMargins mPadding;
+//  QCPItemPosition * const position;
+//  QCPItemAnchor * const topLeft;
+//  QCPItemAnchor * const top;
+//  QCPItemAnchor * const topRight;
+//  QCPItemAnchor * const right;
+//  QCPItemAnchor * const bottomRight;
+//  QCPItemAnchor * const bottom;
+//  QCPItemAnchor * const bottomLeft;
+//  QCPItemAnchor * const left;
+  QCPItemPosition *position
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *topLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *top
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *topRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *right
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottomRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottom
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottomLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *left
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2638,7 +2685,7 @@ protected:
 class QCPItemEllipse : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2660,27 +2707,77 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const topLeft;
-  QCPItemPosition * const bottomRight;
-  QCPItemAnchor * const topLeftRim;
-  QCPItemAnchor * const top;
-  QCPItemAnchor * const topRightRim;
-  QCPItemAnchor * const right;
-  QCPItemAnchor * const bottomRightRim;
-  QCPItemAnchor * const bottom;
-  QCPItemAnchor * const bottomLeftRim;
-  QCPItemAnchor * const left;
-  QCPItemAnchor * const center;
-
-protected:
-  enum AnchorIndex {aiTopLeftRim, aiTop, aiTopRightRim, aiRight, aiBottomRightRim, aiBottom, aiBottomLeftRim, aiLeft, aiCenter};
-
-public:
-  // property members:
-  QPen mPen;
-  QPen mSelectedPen;
-  QBrush mBrush;
-  QBrush mSelectedBrush;
+//  QCPItemPosition * const topLeft;
+//  QCPItemPosition * const bottomRight;
+//  QCPItemAnchor * const topLeftRim;
+//  QCPItemAnchor * const top;
+//  QCPItemAnchor * const topRightRim;
+//  QCPItemAnchor * const right;
+//  QCPItemAnchor * const bottomRightRim;
+//  QCPItemAnchor * const bottom;
+//  QCPItemAnchor * const bottomLeftRim;
+//  QCPItemAnchor * const left;
+//  QCPItemAnchor * const center;
+  QCPItemPosition *topLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *bottomRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *topLeftRim
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *top
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *topRightRim
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *right
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottomRightRim
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottom
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottomLeftRim
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *left
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2696,7 +2793,7 @@ protected:
 class QCPItemPixmap : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2720,27 +2817,62 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const topLeft;
-  QCPItemPosition * const bottomRight;
-  QCPItemAnchor * const top;
-  QCPItemAnchor * const topRight;
-  QCPItemAnchor * const right;
-  QCPItemAnchor * const bottom;
-  QCPItemAnchor * const bottomLeft;
-  QCPItemAnchor * const left;
-
-protected:
-  enum AnchorIndex {aiTop, aiTopRight, aiRight, aiBottom, aiBottomLeft, aiLeft};
-
-public:
-  // property members:
-  QPixmap mPixmap;
-  QPixmap mScaledPixmap;
-  bool mScaled;
-  Qt::AspectRatioMode mAspectRatioMode;
-  Qt::TransformationMode mTransformationMode;
-  QPen mPen;
-  QPen mSelectedPen;
+//  QCPItemPosition * const topLeft;
+//  QCPItemPosition * const bottomRight;
+//  QCPItemAnchor * const top;
+//  QCPItemAnchor * const topRight;
+//  QCPItemAnchor * const right;
+//  QCPItemAnchor * const bottom;
+//  QCPItemAnchor * const bottomLeft;
+//  QCPItemAnchor * const left;
+  QCPItemPosition *topLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *bottomRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *top
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *topRight
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *right
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottom
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *bottomLeft
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *left
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2757,7 +2889,7 @@ protected:
 class QCPItemTracer : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2799,7 +2931,13 @@ public:
   // non-virtual methods:
   void updatePosition();
 
-  QCPItemPosition * const position;
+//  QCPItemPosition * const position;
+  QCPItemPosition *position
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
@@ -2814,7 +2952,7 @@ protected:
 class QCPItemBracket : public QCPAbstractItem
 {
 %TypeHeaderCode
-#include "qcustomplot.h"
+#include <qcustomplot.h>
 %End
 
 public:
@@ -2842,19 +2980,28 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-  QCPItemPosition * const left;
-  QCPItemPosition * const right;
-  QCPItemAnchor * const center;
+//  QCPItemPosition * const left;
+//  QCPItemPosition * const right;
+//  QCPItemAnchor * const center;
 
-protected:
-  // property members:
-  enum AnchorIndex {aiCenter};
-
-public:
-  QPen mPen;
-  QPen mSelectedPen;
-  double mLength;
-  BracketStyle mStyle;
+  QCPItemPosition *left
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemPosition *right
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
+  QCPItemAnchor *center
+  {
+      %SetCode
+      // This is a *const, no setter
+      %End
+  };
 
 protected:
   // reimplemented virtual methods:
