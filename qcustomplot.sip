@@ -40,8 +40,7 @@ enum MarginSide { msLeft     = 0x01 ///< <tt>0x01</tt> left margin
                   ,msAll     = 0xFF ///< <tt>0xFF</tt> all margins
                   ,msNone    = 0x00 ///< <tt>0x00</tt> no margin
                 };
-//Q_DECLARE_FLAGS(MarginSides, MarginSide)
-typedef QFlags<MarginSide> MarginSides;
+typedef QFlags<QCP::MarginSide> MarginSides;
 
 enum AntialiasedElement { aeAxes           = 0x0001 ///< <tt>0x0001</tt> Axis base line and tick marks
                           ,aeGrid          = 0x0002 ///< <tt>0x0002</tt> Grid lines
@@ -57,8 +56,7 @@ enum AntialiasedElement { aeAxes           = 0x0001 ///< <tt>0x0001</tt> Axis ba
                           ,aeAll           = 0xFFFF ///< <tt>0xFFFF</tt> All elements
                           ,aeNone          = 0x0000 ///< <tt>0x0000</tt> No elements
                         };
-//Q_DECLARE_FLAGS(AntialiasedElements, AntialiasedElement)
-typedef QFlags<AntialiasedElement> AntialiasedElements;
+typedef QFlags<QCP::AntialiasedElement> AntialiasedElements;
 
 enum PlottingHint { phNone            = 0x000 ///< <tt>0x000</tt> No hints are set
                     ,phFastPolylines  = 0x001 ///< <tt>0x001</tt> Graph/Curve lines are drawn with a faster method. This reduces the quality
@@ -67,7 +65,7 @@ enum PlottingHint { phNone            = 0x000 ///< <tt>0x000</tt> No hints are s
                                               ///<                This is set by default to prevent the plot from freezing on fast consecutive replots (e.g. user drags ranges with mouse).
                     ,phCacheLabels    = 0x004 ///< <tt>0x004</tt> axis (tick) labels will be cached as pixmaps, increasing replot performance.
                   };
-typedef QFlags<PlottingHint> PlottingHints;
+typedef QFlags<QCP::PlottingHint> PlottingHints;
 
 enum Interaction { iRangeDrag         = 0x001 ///< <tt>0x001</tt> Axis ranges are draggable (see \ref QCPAxisRect::setRangeDrag, \ref QCPAxisRect::setRangeDragAxes)
                    ,iRangeZoom        = 0x002 ///< <tt>0x002</tt> Axis ranges are zoomable with the mouse wheel (see \ref QCPAxisRect::setRangeZoom, \ref QCPAxisRect::setRangeZoomAxes)
@@ -78,8 +76,7 @@ enum Interaction { iRangeDrag         = 0x001 ///< <tt>0x001</tt> Axis ranges ar
                    ,iSelectItems      = 0x040 ///< <tt>0x040</tt> Items are selectable (Rectangles, Arrows, Textitems, etc. see \ref QCPAbstractItem)
                    ,iSelectOther      = 0x080 ///< <tt>0x080</tt> All other objects are selectable (e.g. your own derived layerables, the plot title,...)
                  };
-//Q_DECLARE_FLAGS(Interactions, Interaction)
-typedef QFlags<Interaction> Interactions;
+typedef QFlags<QCP::Interaction> Interactions;
 
 bool isInvalidData(double value);
 bool isInvalidData(double value1, double value2);
@@ -160,7 +157,7 @@ public:
                      ,pmNoCaching    = 0x02   ///< <tt>0x02</tt> Mode for all sorts of exports (e.g. PNG, PDF,...). For example, this prevents using cached pixmap labels
                      ,pmNonCosmetic  = 0x04   ///< <tt>0x04</tt> Turns pen widths 0 to 1, i.e. disables cosmetic pens. (A cosmetic pen is always drawn with width 1 pixel in the vector image/pdf viewer, independent of zoom.)
                    };
-  typedef QFlags<PainterMode> PainterModes;
+  typedef QFlags<QCPPainter::PainterMode> PainterModes;
 
   QCPPainter();
   QCPPainter(QPaintDevice *device);
@@ -190,7 +187,7 @@ public:
 };
 
 
-class  QCPLayer
+class QCPLayer
 {
 %TypeHeaderCode
 #include <qcustomplot.h>
@@ -214,6 +211,9 @@ protected:
   // non-virtual methods:
   void addChild(QCPLayerable *layerable, bool prepend);
   void removeChild(QCPLayerable *layerable);
+
+private:
+  QCPLayer(const QCPLayer &);
 };
 
 class  QCPLayerable : public QObject
@@ -551,13 +551,6 @@ public:
   double realLength() const;
   void draw(QCPPainter *painter, const QVector2D &pos, const QVector2D &dir) const;
   void draw(QCPPainter *painter, const QVector2D &pos, double angle) const;
-
-public:
-  // property members:
-  EndingStyle mStyle;
-  double mWidth;
-  double mLength;
-  bool mInverted;
 };
 
 
@@ -586,17 +579,6 @@ public:
   void setSubGridPen(const QPen &pen);
   void setZeroLinePen(const QPen &pen);
 
-public:
-  // property members:
-  bool mSubGridVisible;
-  bool mAntialiasedSubGrid;
-  bool mAntialiasedZeroLine;
-  QPen mPen;
-  QPen mSubGridPen;
-  QPen mZeroLinePen;
-  // non-property members:
-  QCPAxis *mParentAxis;
-
 protected:
   // reimplemented virtual methods:
   virtual void applyDefaultAntialiasingHint(QCPPainter *painter) const;
@@ -620,8 +602,7 @@ public:
                   ,atTop    = 0x04  ///< <tt>0x04</tt> Axis is horizontal and on the top side of the axis rect
                   ,atBottom = 0x08  ///< <tt>0x08</tt> Axis is horizontal and on the bottom side of the axis rect
                 };
-//  Q_DECLARE_FLAGS(AxisTypes, AxisType)
-  typedef QFlags<AxisType> AxisTypes;
+  typedef QFlags<QCPAxis::AxisType> AxisTypes;
   enum LabelType { ltNumber    ///< Tick coordinate is regarded as normal number and will be displayed as such. (see \ref setNumberFormat)
                    ,ltDateTime ///< Tick coordinate is regarded as a date/time (seconds since 1970-01-01T00:00:00 UTC) and will be displayed and formatted as such. (for details, see \ref setDateTimeFormat)
                  };
@@ -637,7 +618,7 @@ public:
                         ,spAxisLabel  = 0x004  ///< The axis label
                       };
 //  Q_DECLARE_FLAGS(SelectableParts, SelectablePart)
-  typedef QFlags<SelectablePart> SelectableParts;
+  typedef QFlags<QCPAxis::SelectablePart> SelectableParts;
 
   explicit QCPAxis(QCPAxisRect *parent, AxisType type);
   virtual ~QCPAxis();
@@ -810,79 +791,6 @@ protected:
 };
 
 
-class QCPAxisPainterPrivate
-{
-%TypeHeaderCode
-#include <qcustomplot.h>
-%End
-
-public:
-  explicit QCPAxisPainterPrivate(QCustomPlot *parentPlot);
-  virtual ~QCPAxisPainterPrivate();
-
-  virtual void draw(QCPPainter *painter);
-  virtual int size() const;
-  void clearCache();
-
-  QRect axisSelectionBox() const;
-  QRect tickLabelsSelectionBox() const;
-  QRect labelSelectionBox() const;
-
-  // public property members:
-  QCPAxis::AxisType type;
-  QPen basePen;
-  QCPLineEnding lowerEnding;
-  QCPLineEnding upperEnding; // directly accessed by QCPAxis setters/getters
-  int labelPadding; // directly accessed by QCPAxis setters/getters
-  QFont labelFont;
-  QColor labelColor;
-  QString label;
-  int tickLabelPadding; // directly accessed by QCPAxis setters/getters
-  double tickLabelRotation; // directly accessed by QCPAxis setters/getters
-  QCPAxis::LabelSide tickLabelSide; // directly accessed by QCPAxis setters/getters
-  bool substituteExponent;
-  bool numberMultiplyCross; // directly accessed by QCPAxis setters/getters
-  int tickLengthIn;
-  int tickLengthOut;
-  int subTickLengthIn;
-  int subTickLengthOut; // directly accessed by QCPAxis setters/getters
-  QPen tickPen;
-  QPen subTickPen;
-  QFont tickLabelFont;
-  QColor tickLabelColor;
-  QRect axisRect;
-  QPen viewportRect;
-  double offset; // directly accessed by QCPAxis setters/getters
-  bool abbreviateDecimalPowers;
-  bool reversedEndings;
-
-  QVector<double> subTickPositions;
-  QVector<double> tickPositions;
-  QVector<QString> tickLabels;
-
-protected:
-//TODO: Изменить
-//  struct TickLabelData
-//  {
-//    QString basePart;
-//    QString expPart;
-//    QRect baseBounds;
-//    QRect expBounds;
-//    QRect totalBounds;
-//    QRect rotatedTotalBounds;
-//    QFont baseFont;
-//    QFont expFont;
-//  };
-  virtual QByteArray generateLabelParameterHash() const;
-
-  virtual void placeTickLabel(QCPPainter *painter, double position, int distanceToAxis, const QString &text, QSize *tickLabelsSize);
-//  virtual void drawTickLabel(QCPPainter *painter, double x, double y, const TickLabelData &labelData) const;
-//  virtual TickLabelData getTickLabelData(const QFont &font, const QString &text) const;
-//  virtual QPointF getTickLabelDrawOffset(const TickLabelData &labelData) const;
-  virtual void getMaxTickLabelSize(const QFont &font, const QString &text, QSize *tickLabelsSize) const;
-};
-
-
 class QCPAbstractPlottable : public QCPLayerable /Abstract/
 {
 %TypeHeaderCode
@@ -978,17 +886,6 @@ public:
   QString name() const;
   virtual QPointF pixelPoint() const;
 
-public:
-  // property members:
-  QString mName;
-
-  // non-property members:
-  QCustomPlot *mParentPlot;
-  QCPAbstractItem *mParentItem;
-  int mAnchorId;
-  QSet<QCPItemPosition*> mChildrenX;
-  QSet<QCPItemPosition*> mChildrenY;
-
 protected:
   // introduced virtual methods:
   virtual QCPItemPosition *toQCPItemPosition();
@@ -998,6 +895,9 @@ protected:
   void removeChildX(QCPItemPosition *pos); // called from pos when its parent anchor is reset or pos deleted
   void addChildY(QCPItemPosition* pos); // called from pos when this anchor is set as parent
   void removeChildY(QCPItemPosition *pos); // called from pos when its parent anchor is reset or pos deleted
+
+private:
+  QCPItemAnchor(const QCPItemAnchor &);
 };
 
 
@@ -1499,8 +1399,7 @@ public:
                         ,spLegendBox  = 0x001 ///< <tt>0x001</tt> The legend box (frame)
                         ,spItems      = 0x002 ///< <tt>0x002</tt> Legend items individually (see \ref selectedItems)
                       };
-//  Q_DECLARE_FLAGS(SelectableParts, SelectablePart)
-  typedef QFlags<SelectablePart> SelectableParts;
+  typedef QFlags<QCPLegend::SelectablePart> SelectableParts;
 
   explicit QCPLegend();
   virtual ~QCPLegend();
@@ -1633,13 +1532,6 @@ class QCPColorScaleAxisRectPrivate : public QCPAxisRect
 public:
   explicit QCPColorScaleAxisRectPrivate(QCPColorScale *parentColorScale);
 protected:
-//  re-using some methods of QCPAxisRect to make them available to friend class QCPColorScale
-//  using QCPAxisRect::calculateAutoMargin;
-//  using QCPAxisRect::mousePressEvent;
-//  using QCPAxisRect::mouseMoveEvent;
-//  using QCPAxisRect::mouseReleaseEvent;
-//  using QCPAxisRect::wheelEvent;
-//  using QCPAxisRect::update;
   virtual void draw(QCPPainter *painter);
   void updateGradientImage();
   Q_SLOT void axisSelectionChanged(QCPAxis::SelectableParts selectedParts);
@@ -2325,8 +2217,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const point1;
-//  QCPItemPosition * const point2;
   //Removed const! for SIP
   QCPItemPosition *point1
   {
@@ -2377,8 +2267,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const start;
-//  QCPItemPosition * const end;
   //Removed const! for SIP
   QCPItemPosition *start
   {
@@ -2428,10 +2316,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const start;
-//  QCPItemPosition * const startDir;
-//  QCPItemPosition * const endDir;
-//  QCPItemPosition * const end;
   //Removed const! for SIP
   QCPItemPosition *start
   {
@@ -2492,14 +2376,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const topLeft;
-//  QCPItemPosition * const bottomRight;
-//  QCPItemAnchor * const top;
-//  QCPItemAnchor * const topRight;
-//  QCPItemAnchor * const right;
-//  QCPItemAnchor * const bottom;
-//  QCPItemAnchor * const bottomLeft;
-//  QCPItemAnchor * const left;
   //Removed const! for SIP
   QCPItemPosition *topLeft
   {
@@ -2604,15 +2480,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const position;
-//  QCPItemAnchor * const topLeft;
-//  QCPItemAnchor * const top;
-//  QCPItemAnchor * const topRight;
-//  QCPItemAnchor * const right;
-//  QCPItemAnchor * const bottomRight;
-//  QCPItemAnchor * const bottom;
-//  QCPItemAnchor * const bottomLeft;
-//  QCPItemAnchor * const left;
   QCPItemPosition *position
   {
       %SetCode
@@ -2707,17 +2574,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const topLeft;
-//  QCPItemPosition * const bottomRight;
-//  QCPItemAnchor * const topLeftRim;
-//  QCPItemAnchor * const top;
-//  QCPItemAnchor * const topRightRim;
-//  QCPItemAnchor * const right;
-//  QCPItemAnchor * const bottomRightRim;
-//  QCPItemAnchor * const bottom;
-//  QCPItemAnchor * const bottomLeftRim;
-//  QCPItemAnchor * const left;
-//  QCPItemAnchor * const center;
   QCPItemPosition *topLeft
   {
       %SetCode
@@ -2817,14 +2673,6 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
-//  QCPItemPosition * const topLeft;
-//  QCPItemPosition * const bottomRight;
-//  QCPItemAnchor * const top;
-//  QCPItemAnchor * const topRight;
-//  QCPItemAnchor * const right;
-//  QCPItemAnchor * const bottom;
-//  QCPItemAnchor * const bottomLeft;
-//  QCPItemAnchor * const left;
   QCPItemPosition *topLeft
   {
       %SetCode
@@ -2979,10 +2827,6 @@ public:
 
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
-
-//  QCPItemPosition * const left;
-//  QCPItemPosition * const right;
-//  QCPItemAnchor * const center;
 
   QCPItemPosition *left
   {
