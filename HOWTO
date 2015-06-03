@@ -1,0 +1,19 @@
+===== PyQCustomPlot ===== 
+
+How to build:
+1. Requires:
+    - sip
+    - PyQt5
+    - QCustomPlot header, located at /usr/include
+    - QCustomPlot lib, located at /usr/lib64
+
+2. Build:
+    - python configure.py
+    - make
+    - make install
+    - cp __init__.py /usr/lib64/python/site-packages/qcustomplot
+
+3. Checks:
+    - Run python interpritator and enter:
+	import qcustomplot
+	dir(qcustomplot)
