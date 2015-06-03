@@ -1,4 +1,5 @@
 import os
+import sys
 from sipconfig import Configuration, ModuleMakefile
 from PyQt5.QtCore import PYQT_CONFIGURATION
 
@@ -15,7 +16,10 @@ config = Configuration()
 # this normally only includes those flags (-x and -t) that relate to SIP's
 # versioning system.
 pyqt_sip_flags = PYQT_CONFIGURATION['sip_flags']
-pyqt_sip_dir = '/usr/share/python3-sip/PyQt5'
+if sys.version_info[0] == 3:
+    pyqt_sip_dir = '/usr/share/python3-sip/PyQt5'
+elif sys.version_info[0] == 2:
+    pyqt_sip_dir = '/usr/share/python-sip/PyQt5'
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
@@ -46,9 +50,9 @@ if config.platform.startswith('win32'):
     makefile.generator = "NMAKE"
 else:
     libname = 'qcustomplot'
-makefile.extra_include_dirs = ['/usr/include/', '/usr/include/qt5', '/usr/include/qt5/QtCore', '/usr/include/qt5/QtWidgets', '/usr/include/qt5/QtGui', '/usr/include/qt5/QtPrintSupport']
+makefile.extra_include_dirs = ['/usr/include', '/usr/include/qt5', '/usr/include/qt5/QtCore', '/usr/include/qt5/QtWidgets', '/usr/include/qt5/QtGui', '/usr/include/qt5/QtPrintSupport']
 makefile.extra_libs = [libname]
-makefile.extra_lib_dirs = ["/usr/lib64/"]
+makefile.extra_lib_dirs = ["/usr/lib64"]
 
 # Generate the Makefile itself.
 makefile.generate()
