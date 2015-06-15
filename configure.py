@@ -23,7 +23,7 @@ elif sys.version_info[0] == 2:
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
-os.system(" ".join([config.sip_bin, "-c", ".", "-b", build_file, "-I", pyqt_sip_dir,  pyqt_sip_flags, "qcustomplot.sip"]))
+os.system(" ".join([config.sip_bin, "-c", ".", "-b", build_file, "-o", "-I", pyqt_sip_dir,  pyqt_sip_flags, "qcustomplot.sip"]))
 
 # We are going to install the SIP specification file for this module and
 # its configuration module.

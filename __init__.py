@@ -2,3 +2,5 @@
 #
 # Author: Dmitry Voronin
 # Date: 03.06.2015
+
+from .qcustomplot import *
