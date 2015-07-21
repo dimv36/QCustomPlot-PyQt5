@@ -1883,6 +1883,110 @@ typedef QMap<double, QCPBarData> QCPBarDataMap;
 typedef QMapIterator<double, QCPBarData> QCPBarDataMapIterator;
 typedef QMutableMapIterator<double, QCPBarData> QCPBarDataMutableMapIterator;
 
+%MappedType QMap<double, QCPBarData>
+{
+%TypeHeaderCode
+// Include the library interface to the type being mapped.
+#include <qmap.h>
+%End
+    %ConvertFromTypeCode
+        PyObject *d = PyDict_New();
+
+        if (!d)
+            return 0;
+
+            QMap<double, QCPBarData>::const_iterator it = sipCpp->constBegin();
+            QMap<double, QCPBarData>::const_iterator end = sipCpp->constEnd();
+
+            while (it != end)
+            {
+                PyObject *kobj = SIPLong_FromLong(it.key());
+
+                if (!kobj)
+                {
+                    Py_DECREF(d);
+                    return 0;
+                }
+
+                QCPBarData v = it.value();
+                PyObject *vobj = sipConvertFromNewType(&v, sipType_QCPBarData,
+                                                       sipTransferObj);
+
+                if (!vobj)
+                {
+                    Py_DECREF(kobj);
+                    Py_DECREF(d);
+
+                    return 0;
+                }
+
+                int rc = PyDict_SetItem(d, kobj, vobj);
+
+                Py_DECREF(vobj);
+                Py_DECREF(kobj);
+
+                if (rc < 0)
+                {
+                    Py_DECREF(d);
+                    return 0;
+                }
+
+                ++it;
+            }
+        return d;
+    %End
+
+    %ConvertToTypeCode
+        if (!sipIsErr)
+            return PyDict_Check(sipPy);
+
+            QMap<double, QCPBarData> *qm = new QMap<double, QCPBarData>;
+
+            SIP_SSIZE_T pos = 0;
+            PyObject *kobj, *vobj;
+
+            while (PyDict_Next(sipPy, &pos, &kobj, &vobj))
+            {
+                PyErr_Clear();
+                double k = SIPLong_AsLong(kobj);
+
+                if (PyErr_Occurred())
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a key has type '%s' but 'float' is expected",
+                                 Py_TYPE(kobj)->tp_name);
+
+                    delete qm;
+                    *sipIsErr = 1;
+
+                    return 0;
+                }
+
+                int vstate;
+                QCPBarData *v = reinterpret_cast< QCPBarData *>(
+                            sipForceConvertToType(vobj, sipType_QCPBarData, sipTransferObj,
+                                                  SIP_NOT_NONE, &vstate, sipIsErr));
+
+                if (*sipIsErr)
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a value has type '%s' but 'QCPBarData' is expected",
+                                 Py_TYPE(vobj)->tp_name);
+
+                    delete qm;
+                    return 0;
+                }
+
+                qm->insert(k, *v);
+
+                sipReleaseType(v, sipType_QCPBarData, vstate);
+            }
+
+            *sipCppPtr = qm;
+
+            return sipGetState(sipTransferObj);
+    %End
+};
 
 class QCPBars : public QCPAbstractPlottable
 {
@@ -1921,7 +2025,6 @@ public:
   // non-property methods:
   void moveBelow(QCPBars *bars);
   void moveAbove(QCPBars *bars);
-//TODO: Аналогично
 //  void addData(const QCPBarDataMap &dataMap);
   void addData(const QCPBarData &data);
   void addData(double key, double value);

@@ -21,6 +21,9 @@
 **  Website/Contact: http://www.qcustomplot.com/                          **
 **             Date: 25.04.15                                             **
 **          Version: 1.3.1                                                **
+**          Version: 1.3.1-mod                                            **
+**          Modified: Dmitry Voronin                                      **
+**          date: 18.07.15                                                **
 ****************************************************************************/
 
 #include "qcustomplot.h"
