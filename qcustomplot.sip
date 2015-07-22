@@ -1890,50 +1890,54 @@ typedef QMutableMapIterator<double, QCPBarData> QCPBarDataMutableMapIterator;
 #include <qmap.h>
 %End
     %ConvertFromTypeCode
-        PyObject *d = PyDict_New();
+    PyObject *d = PyDict_New();
 
-        if (!d)
+    if (!d)
+        return 0;
+
+    QMap<double, QCPBarData>::const_iterator it = sipCpp->constBegin();
+    QMap<double, QCPBarData>::const_iterator end = sipCpp->constEnd();
+
+    while (it != end)
+    {
+        PyObject *kobj = PyFloat_FromDouble(it.key());
+
+        if (!kobj)
+        {
+            Py_DECREF(d);
+
             return 0;
+        }
 
-            QMap<double, QCPBarData>::const_iterator it = sipCpp->constBegin();
-            QMap<double, QCPBarData>::const_iterator end = sipCpp->constEnd();
+        QCPBarData *v = new QCPBarData(it.value());
+        PyObject *vobj = sipConvertFromNewType(v, sipType_QCPBarData,
+                sipTransferObj);
 
-            while (it != end)
-            {
-                PyObject *kobj = SIPLong_FromLong(it.key());
+        if (!vobj)
+        {
+            delete v;
+            Py_DECREF(kobj);
+            Py_DECREF(d);
 
-                if (!kobj)
-                {
-                    Py_DECREF(d);
-                    return 0;
-                }
+            return 0;
+        }
 
-                QCPBarData v = it.value();
-                PyObject *vobj = sipConvertFromNewType(&v, sipType_QCPBarData,
-                                                       sipTransferObj);
+        int rc = PyDict_SetItem(d, kobj, vobj);
 
-                if (!vobj)
-                {
-                    Py_DECREF(kobj);
-                    Py_DECREF(d);
+        Py_DECREF(vobj);
+        Py_DECREF(kobj);
 
-                    return 0;
-                }
+        if (rc < 0)
+        {
+            Py_DECREF(d);
 
-                int rc = PyDict_SetItem(d, kobj, vobj);
+            return 0;
+        }
 
-                Py_DECREF(vobj);
-                Py_DECREF(kobj);
+        ++it;
+    }
 
-                if (rc < 0)
-                {
-                    Py_DECREF(d);
-                    return 0;
-                }
-
-                ++it;
-            }
-        return d;
+    return d;
     %End
 
     %ConvertToTypeCode
@@ -1948,7 +1952,7 @@ typedef QMutableMapIterator<double, QCPBarData> QCPBarDataMutableMapIterator;
             while (PyDict_Next(sipPy, &pos, &kobj, &vobj))
             {
                 PyErr_Clear();
-                double k = SIPLong_AsLong(kobj);
+                double k = PyFloat_AsDouble(kobj);
 
                 if (PyErr_Occurred())
                 {
@@ -2011,7 +2015,7 @@ public:
   QCPBars *barBelow() const;
   QCPBars *barAbove() const;
 //TODO: Реализовать корректную сигнатуру
-//  QCPBarDataMap *data() const;
+  QCPBarDataMap *data() const;
 
   // setters:
   void setWidth(double width);
@@ -2019,13 +2023,13 @@ public:
   void setBarsGroup(QCPBarsGroup *barsGroup);
   void setBaseValue(double baseValue);
 //TODO: Аналогично
-//  void setData(QCPBarDataMap *data, bool copy=false);
+  void setData(QCPBarDataMap *data, bool copy=false);
   void setData(const QVector<double> &key, const QVector<double> &value);
 
   // non-property methods:
   void moveBelow(QCPBars *bars);
   void moveAbove(QCPBars *bars);
-//  void addData(const QCPBarDataMap &dataMap);
+  void addData(const QCPBarDataMap &dataMap);
   void addData(const QCPBarData &data);
   void addData(double key, double value);
   void addData(const QVector<double> &keys, const QVector<double> &values);
