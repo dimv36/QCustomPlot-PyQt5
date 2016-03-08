@@ -1,0 +1,9 @@
+# Build
+*.o
+moc_*
+sip*.cpp
+sip*.h
+lib*
+qcustomplot.sbf
+qcustomplot.exp
+Makefile
