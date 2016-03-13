@@ -6,4 +6,4 @@ sip*.h
 lib*
 qcustomplot.sbf
 qcustomplot.exp
-Makefile
+.idea/
