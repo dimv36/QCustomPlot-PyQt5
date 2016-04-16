@@ -1,4 +1,0 @@
-recursive-include qcustomplot *.c *.h *.manifest
-recursive-include lib *.py
-include AUTHORS README.rst INSTALL LICENSE NEWS
-include PKG-INFO MANIFEST.in MANIFEST setup.py Makefile
