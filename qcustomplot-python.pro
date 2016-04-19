@@ -24,6 +24,7 @@ SOURCES += \
     sipqcustomplotQCPAxisRect.cpp \
     sipqcustomplotQCPAxisSelectableParts.cpp \
     sipqcustomplotQCPBarData.cpp \
+    sipqcustomplotQCPBarDataMap.cpp \
     sipqcustomplotQCPBars.cpp \
     sipqcustomplotQCPBarsGroup.cpp \
     sipqcustomplotQCPColorGradient.cpp \
@@ -33,9 +34,12 @@ SOURCES += \
     sipqcustomplotQCPColorScaleAxisRectPrivate.cpp \
     sipqcustomplotQCPCurve.cpp \
     sipqcustomplotQCPCurveData.cpp \
+    sipqcustomplotQCPCurveDataMap.cpp \
     sipqcustomplotQCPData.cpp \
+    sipqcustomplotQCPDataMap.cpp \
     sipqcustomplotQCPFinancial.cpp \
     sipqcustomplotQCPFinancialData.cpp \
+    sipqcustomplotQCPFinancialDataMap.cpp \
     sipqcustomplotQCPGraph.cpp \
     sipqcustomplotQCPGrid.cpp \
     sipqcustomplotQCPInteractions.cpp \
@@ -84,7 +88,7 @@ SOURCES += \
     sipqcustomplotQList0101QCPLayerable.cpp \
     sipqcustomplotQList0101QCPLayoutElement.cpp \
     sipqcustomplotQList0101QCPLegend.cpp \
-    sipqcustomplotQMap24000100QCPBarData.cpp \
+    sipqcustomplotQMap24000100QColor.cpp \
     sipqcustomplotQVector0100QCPData.cpp \
     sipqcustomplotQVector0100QString.cpp
 

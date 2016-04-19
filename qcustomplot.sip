@@ -841,6 +841,15 @@ public:
   void rescaleKeyAxis(bool onlyEnlarge=false) const;
   void rescaleValueAxis(bool onlyEnlarge=false) const;
 
+public:
+  /*!
+    Represents negative and positive sign domain for passing to \ref getKeyRange and \ref getValueRange.
+  */
+  enum SignDomain { sdNegative  ///< The negative sign domain, i.e. numbers smaller than zero
+                   ,sdBoth     ///< Both sign domains, including zero, i.e. all (rational) numbers
+                   ,sdPositive ///< The positive sign domain, i.e. numbers greater than zero
+                 };
+
 signals:
   void selectionChanged(bool selected);
   void selectableChanged(bool selectable);
@@ -857,13 +866,13 @@ protected:
 
   // introduced virtual methods:
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const = 0;
-//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
-//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
+  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
+  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const = 0;
 
   // non-virtual methods:
-//  void coordsToPixels(double key, double value, double &x, double &y) const;
+  //void coordsToPixels(double key, double value, double &x, double &y) const;
   const QPointF coordsToPixels(double key, double value) const;
-//  void pixelsToCoords(double x, double y, double &key, double &value) const;
+  //void pixelsToCoords(double x, double y, double &key, double &value) const;
   void pixelsToCoords(const QPointF &pixelPos, double &key, double &value) const;
   QPen mainPen() const;
   QBrush mainBrush() const;
@@ -1186,6 +1195,116 @@ protected:
   void drawBackground(QCPPainter *painter);
 };
 
+%MappedType QMap<double, QColor>
+{
+%TypeHeaderCode
+// Include the library interface to the type being mapped.
+#include <qmap.h>
+#include <qcolor.h>
+%End
+    %ConvertFromTypeCode
+    PyObject *d = PyDict_New();
+
+    if (!d)
+        return 0;
+
+    QMap<double, QColor>::const_iterator it = sipCpp->constBegin();
+    QMap<double, QColor>::const_iterator end = sipCpp->constEnd();
+
+    while (it != end)
+    {
+        PyObject *kobj = PyFloat_FromDouble(it.key());
+
+        if (!kobj)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        QColor *v = new QColor(it.value());
+        PyObject *vobj = sipConvertFromNewType(v, sipType_QColor,
+                sipTransferObj);
+
+        if (!vobj)
+        {
+            delete v;
+            Py_DECREF(kobj);
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        int rc = PyDict_SetItem(d, kobj, vobj);
+
+        Py_DECREF(vobj);
+        Py_DECREF(kobj);
+
+        if (rc < 0)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        ++it;
+    }
+
+    return d;
+    %End
+
+    %ConvertToTypeCode
+        if (!sipIsErr)
+            return PyDict_Check(sipPy);
+
+            QMap<double, QColor> *qm = new QMap<double, QColor>;
+
+            SIP_SSIZE_T pos = 0;
+            PyObject *kobj, *vobj;
+
+            while (PyDict_Next(sipPy, &pos, &kobj, &vobj))
+            {
+                PyErr_Clear();
+                double k = PyFloat_AsDouble(kobj);
+
+                if (PyErr_Occurred())
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a key has type '%s' but 'float' is expected",
+                                 Py_TYPE(kobj)->tp_name);
+
+                    delete qm;
+                    *sipIsErr = 1;
+
+                    return 0;
+                }
+
+                int vstate;
+                QColor *v = reinterpret_cast< QColor *>(
+                            sipForceConvertToType(vobj, sipType_QColor, sipTransferObj,
+                                                  SIP_NOT_NONE, &vstate, sipIsErr));
+
+                if (*sipIsErr)
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a value has type '%s' but 'QColor' is expected",
+                                 Py_TYPE(vobj)->tp_name);
+
+                    delete qm;
+                    return 0;
+                }
+
+                qm->insert(k, *v);
+
+                sipReleaseType(v, sipType_QCPBarData, vstate);
+            }
+
+            *sipCppPtr = qm;
+
+            return sipGetState(sipTransferObj);
+    %End
+};
+
 class QCPColorGradient
 {
 %TypeHeaderCode
@@ -1215,15 +1334,13 @@ public:
 
   // getters:
   int levelCount() const;
-// TODO: Реализовать корректню сигнатуру
-//  QMap<double, QColor> colorStops() const;
+  QMap<double, QColor> colorStops() const;
   ColorInterpolation colorInterpolation() const;
   bool periodic() const;
 
   // setters:
   void setLevelCount(int n);
-// TODO: аналогично предыдущему
-//  void setColorStops(const QMap<double, QColor> &colorStops);
+  void setColorStops(const QMap<double, QColor> &colorStops);
   void setColorStopAt(double position, const QColor &color);
   void setColorInterpolation(ColorInterpolation interpolation);
   void setPeriodic(bool enabled);
@@ -1618,6 +1735,116 @@ typedef QMap<double, QCPData> QCPDataMap;
 typedef QMapIterator<double, QCPData> QCPDataMapIterator;
 typedef QMutableMapIterator<double, QCPData> QCPDataMutableMapIterator;
 
+%MappedType QCPDataMap
+{
+%TypeHeaderCode
+// Include the library interface to the type being mapped.
+#include <qmap.h>
+#include <qcustomplot.h>
+%End
+    %ConvertFromTypeCode
+    PyObject *d = PyDict_New();
+
+    if (!d)
+        return 0;
+
+    QMap<double, QCPData>::const_iterator it = sipCpp->constBegin();
+    QMap<double, QCPData>::const_iterator end = sipCpp->constEnd();
+
+    while (it != end)
+    {
+        PyObject *kobj = PyFloat_FromDouble(it.key());
+
+        if (!kobj)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        QCPData *v = new QCPData(it.value());
+        PyObject *vobj = sipConvertFromNewType(v, sipType_QCPData,
+                sipTransferObj);
+
+        if (!vobj)
+        {
+            delete v;
+            Py_DECREF(kobj);
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        int rc = PyDict_SetItem(d, kobj, vobj);
+
+        Py_DECREF(vobj);
+        Py_DECREF(kobj);
+
+        if (rc < 0)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        ++it;
+    }
+
+    return d;
+    %End
+
+    %ConvertToTypeCode
+        if (!sipIsErr)
+            return PyDict_Check(sipPy);
+
+            QMap<double, QCPData> *qm = new QMap<double, QCPData>;
+
+            SIP_SSIZE_T pos = 0;
+            PyObject *kobj, *vobj;
+
+            while (PyDict_Next(sipPy, &pos, &kobj, &vobj))
+            {
+                PyErr_Clear();
+                double k = PyFloat_AsDouble(kobj);
+
+                if (PyErr_Occurred())
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a key has type '%s' but 'float' is expected",
+                                 Py_TYPE(kobj)->tp_name);
+
+                    delete qm;
+                    *sipIsErr = 1;
+
+                    return 0;
+                }
+
+                int vstate;
+                QCPData *v = reinterpret_cast< QCPData *>(
+                            sipForceConvertToType(vobj, sipType_QCPData, sipTransferObj,
+                                                  SIP_NOT_NONE, &vstate, sipIsErr));
+
+                if (*sipIsErr)
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a value has type '%s' but 'QCPData' is expected",
+                                 Py_TYPE(vobj)->tp_name);
+
+                    delete qm;
+                    return 0;
+                }
+
+                qm->insert(k, *v);
+
+                sipReleaseType(v, sipType_QCPData, vstate);
+            }
+
+            *sipCppPtr = qm;
+
+            return sipGetState(sipTransferObj);
+    %End
+};
+
 
 class QCPGraph : public QCPAbstractPlottable
 {
@@ -1644,8 +1871,7 @@ public:
   virtual ~QCPGraph();
 
   // getters:
-  //TODO: Реализовать корректную сигнатуру
-  //QCPDataMap *data() const;
+  QCPDataMap *data() const;
   LineStyle lineStyle() const;
   QCPScatterStyle scatterStyle() const;
   ErrorType errorType() const;
@@ -1656,8 +1882,7 @@ public:
   bool adaptiveSampling() const;
 
   // setters:
-  //TODO: Аналогично
-  //void setData(QCPDataMap *data, bool copy=false);
+  void setData(QCPDataMap *data, bool copy=false);
   void setData(const QVector<double> &key, const QVector<double> &value);
   void setDataKeyError(const QVector<double> &key, const QVector<double> &value, const QVector<double> &keyError);
   void setDataKeyError(const QVector<double> &key, const QVector<double> &value, const QVector<double> &keyErrorMinus, const QVector<double> &keyErrorPlus);
@@ -1675,8 +1900,7 @@ public:
   void setAdaptiveSampling(bool enabled);
 
   // non-property methods:
-  //TODO: Аналогично
-  //void addData(const QCPDataMap &dataMap);
+  void addData(const QCPDataMap &dataMap);
   void addData(const QCPData &data);
   void addData(double key, double value);
   void addData(const QVector<double> &keys, const QVector<double> &values);
@@ -1699,10 +1923,10 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
-//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
+  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
+  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain, bool includeErrors) const; // overloads base class interface
 
   // introduced virtual methods:
   virtual void drawFill(QCPPainter *painter, QVector<QPointF> *lineData) const;
@@ -1755,6 +1979,115 @@ typedef QMap<double, QCPCurveData> QCPCurveDataMap;
 typedef QMapIterator<double, QCPCurveData> QCPCurveDataMapIterator;
 typedef QMutableMapIterator<double, QCPCurveData> QCPCurveDataMutableMapIterator;
 
+%MappedType QCPCurveDataMap
+{
+%TypeHeaderCode
+// Include the library interface to the type being mapped.
+#include <qmap.h>
+#include <qcustomplot.h>
+%End
+    %ConvertFromTypeCode
+    PyObject *d = PyDict_New();
+
+    if (!d)
+        return 0;
+
+    QMap<double, QCPCurveData>::const_iterator it = sipCpp->constBegin();
+    QMap<double, QCPCurveData>::const_iterator end = sipCpp->constEnd();
+
+    while (it != end)
+    {
+        PyObject *kobj = PyFloat_FromDouble(it.key());
+
+        if (!kobj)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        QCPCurveData *v = new QCPCurveData(it.value());
+        PyObject *vobj = sipConvertFromNewType(v, sipType_QCPCurveData,
+                sipTransferObj);
+
+        if (!vobj)
+        {
+            delete v;
+            Py_DECREF(kobj);
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        int rc = PyDict_SetItem(d, kobj, vobj);
+
+        Py_DECREF(vobj);
+        Py_DECREF(kobj);
+
+        if (rc < 0)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        ++it;
+    }
+
+    return d;
+    %End
+
+    %ConvertToTypeCode
+        if (!sipIsErr)
+            return PyDict_Check(sipPy);
+
+            QMap<double, QCPCurveData> *qm = new QMap<double, QCPCurveData>;
+
+            SIP_SSIZE_T pos = 0;
+            PyObject *kobj, *vobj;
+
+            while (PyDict_Next(sipPy, &pos, &kobj, &vobj))
+            {
+                PyErr_Clear();
+                double k = PyFloat_AsDouble(kobj);
+
+                if (PyErr_Occurred())
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a key has type '%s' but 'float' is expected",
+                                 Py_TYPE(kobj)->tp_name);
+
+                    delete qm;
+                    *sipIsErr = 1;
+
+                    return 0;
+                }
+
+                int vstate;
+                QCPCurveData *v = reinterpret_cast< QCPCurveData *>(
+                            sipForceConvertToType(vobj, sipType_QCPCurveData, sipTransferObj,
+                                                  SIP_NOT_NONE, &vstate, sipIsErr));
+
+                if (*sipIsErr)
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a value has type '%s' but 'QCPCurveData' is expected",
+                                 Py_TYPE(vobj)->tp_name);
+
+                    delete qm;
+                    return 0;
+                }
+
+                qm->insert(k, *v);
+
+                sipReleaseType(v, sipType_QCPCurveData, vstate);
+            }
+
+            *sipCppPtr = qm;
+
+            return sipGetState(sipTransferObj);
+    %End
+};
 
 class QCPCurve : public QCPAbstractPlottable
 {
@@ -1770,22 +2103,19 @@ public:
   virtual ~QCPCurve();
 
   // getters:
-  //TODO: реализовать корректную сигнатуру
-  //QCPCurveDataMap *data() const;
+  QCPCurveDataMap *data() const;
   QCPScatterStyle scatterStyle() const;
   LineStyle lineStyle() const;
 
   // setters:
-  //TODO: Аналогично
-  //void setData(QCPCurveDataMap *data, bool copy=false);
+  void setData(QCPCurveDataMap *data, bool copy=false);
   void setData(const QVector<double> &t, const QVector<double> &key, const QVector<double> &value);
   void setData(const QVector<double> &key, const QVector<double> &value);
   void setScatterStyle(const QCPScatterStyle &style);
   void setLineStyle(LineStyle style);
 
   // non-property methods:
-  //TODO: Аналогично
-  //void addData(const QCPCurveDataMap &dataMap);
+  void addData(const QCPCurveDataMap &dataMap);
   void addData(const QCPCurveData &data);
   void addData(double t, double key, double value);
   void addData(double key, double value);
@@ -1803,8 +2133,8 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // introduced virtual methods:
   virtual void drawScatterPlot(QCPPainter *painter, const QVector<QPointF> *pointData) const;
@@ -1883,11 +2213,12 @@ typedef QMap<double, QCPBarData> QCPBarDataMap;
 typedef QMapIterator<double, QCPBarData> QCPBarDataMapIterator;
 typedef QMutableMapIterator<double, QCPBarData> QCPBarDataMutableMapIterator;
 
-%MappedType QMap<double, QCPBarData>
+%MappedType QCPBarDataMap
 {
 %TypeHeaderCode
 // Include the library interface to the type being mapped.
 #include <qmap.h>
+#include <qcustomplot.h>
 %End
     %ConvertFromTypeCode
     PyObject *d = PyDict_New();
@@ -2014,7 +2345,6 @@ public:
   double baseValue() const;
   QCPBars *barBelow() const;
   QCPBars *barAbove() const;
-//TODO: Реализовать корректную сигнатуру
   QCPBarDataMap *data() const;
 
   // setters:
@@ -2022,7 +2352,6 @@ public:
   void setWidthType(WidthType widthType);
   void setBarsGroup(QCPBarsGroup *barsGroup);
   void setBaseValue(double baseValue);
-//TODO: Аналогично
   void setData(QCPBarDataMap *data, bool copy=false);
   void setData(const QVector<double> &key, const QVector<double> &value);
 
@@ -2046,8 +2375,8 @@ protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // non-virtual methods:
 //TODO: Реализовать корректную сигнатуру
@@ -2233,6 +2562,115 @@ typedef QMap<double, QCPFinancialData> QCPFinancialDataMap;
 typedef QMapIterator<double, QCPFinancialData> QCPFinancialDataMapIterator;
 typedef QMutableMapIterator<double, QCPFinancialData> QCPFinancialDataMutableMapIterator;
 
+%MappedType QCPFinancialDataMap
+{
+%TypeHeaderCode
+// Include the library interface to the type being mapped.
+#include <qmap.h>
+#include <qcustomplot.h>
+%End
+    %ConvertFromTypeCode
+    PyObject *d = PyDict_New();
+
+    if (!d)
+        return 0;
+
+    QMap<double, QCPFinancialData>::const_iterator it = sipCpp->constBegin();
+    QMap<double, QCPFinancialData>::const_iterator end = sipCpp->constEnd();
+
+    while (it != end)
+    {
+        PyObject *kobj = PyFloat_FromDouble(it.key());
+
+        if (!kobj)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        QCPFinancialData *v = new QCPFinancialData(it.value());
+        PyObject *vobj = sipConvertFromNewType(v, sipType_QCPFinancialData,
+                sipTransferObj);
+
+        if (!vobj)
+        {
+            delete v;
+            Py_DECREF(kobj);
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        int rc = PyDict_SetItem(d, kobj, vobj);
+
+        Py_DECREF(vobj);
+        Py_DECREF(kobj);
+
+        if (rc < 0)
+        {
+            Py_DECREF(d);
+
+            return 0;
+        }
+
+        ++it;
+    }
+
+    return d;
+    %End
+
+    %ConvertToTypeCode
+        if (!sipIsErr)
+            return PyDict_Check(sipPy);
+
+            QMap<double, QCPFinancialData> *qm = new QMap<double, QCPFinancialData>;
+
+            SIP_SSIZE_T pos = 0;
+            PyObject *kobj, *vobj;
+
+            while (PyDict_Next(sipPy, &pos, &kobj, &vobj))
+            {
+                PyErr_Clear();
+                double k = PyFloat_AsDouble(kobj);
+
+                if (PyErr_Occurred())
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a key has type '%s' but 'float' is expected",
+                                 Py_TYPE(kobj)->tp_name);
+
+                    delete qm;
+                    *sipIsErr = 1;
+
+                    return 0;
+                }
+
+                int vstate;
+                QCPFinancialData *v = reinterpret_cast< QCPFinancialData *>(
+                            sipForceConvertToType(vobj, sipType_QCPFinancialData, sipTransferObj,
+                                                  SIP_NOT_NONE, &vstate, sipIsErr));
+
+                if (*sipIsErr)
+                {
+                    PyErr_Format(PyExc_TypeError,
+                                 "a value has type '%s' but 'QCPFinancialData' is expected",
+                                 Py_TYPE(vobj)->tp_name);
+
+                    delete qm;
+                    return 0;
+                }
+
+                qm->insert(k, *v);
+
+                sipReleaseType(v, sipType_QCPFinancialData, vstate);
+            }
+
+            *sipCppPtr = qm;
+
+            return sipGetState(sipTransferObj);
+    %End
+};
 
 class QCPFinancial : public QCPAbstractPlottable
 {
@@ -2249,8 +2687,7 @@ public:
   virtual ~QCPFinancial();
 
   // getters:
-  //TODO: Реализовать корректную сигнатуру
-  //QCPFinancialDataMap *data() const;
+  QCPFinancialDataMap *data() const;
   ChartStyle chartStyle() const;
   double width() const;
   bool twoColored() const;
@@ -2260,9 +2697,8 @@ public:
   QPen penNegative() const;
 
   // setters:
-  //TODO: Аналогично
-  //void setData(QCPFinancialDataMap *data, bool copy=false);
-  void setData(const QVector<double> &key, const QVector<double> &open, const QVector<double> &high, const QVector<double> &low, const QVector<double> &close);
+  void setData(QCPFinancialDataMap *data, bool copy=false);
+  //void setData(const QVector<double> &key, const QVector<double> &open, const QVector<double> &high, const QVector<double> &low, const QVector<double> &close);
   void setChartStyle(ChartStyle style);
   void setWidth(double width);
   void setTwoColored(bool twoColored);
@@ -2272,8 +2708,7 @@ public:
   void setPenNegative(const QPen &pen);
 
   // non-property methods:
-  //TODO: Аналогично
-  //void addData(const QCPFinancialDataMap &dataMap);
+  void addData(const QCPFinancialDataMap &dataMap);
   void addData(const QCPFinancialData &data);
   void addData(double key, double open, double high, double low, double close);
   void addData(const QVector<double> &key, const QVector<double> &open, const QVector<double> &high, const QVector<double> &low, const QVector<double> &close);
@@ -2287,15 +2722,14 @@ public:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
 
   // static methods:
-  //TODO: Аналогично
-  //static QCPFinancialDataMap timeSeriesToOhlc(const QVector<double> &time, const QVector<double> &value, double timeBinSize, double timeBinOffset = 0);
+  static QCPFinancialDataMap timeSeriesToOhlc(const QVector<double> &time, const QVector<double> &value, double timeBinSize, double timeBinOffset = 0);
 
 protected:
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter);
   virtual void drawLegendIcon(QCPPainter *painter, const QRectF &rect) const;
-//  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
-//  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getKeyRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
+  virtual QCPRange getValueRange(bool &foundRange, SignDomain inSignDomain=sdBoth) const;
 
   // non-virtual methods:
 //TODO: Аналогично

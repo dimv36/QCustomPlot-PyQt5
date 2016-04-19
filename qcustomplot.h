@@ -1446,11 +1446,7 @@ public:
   void rescaleKeyAxis(bool onlyEnlarge=false) const;
   void rescaleValueAxis(bool onlyEnlarge=false) const;
   
-signals:
-  void selectionChanged(bool selected);
-  void selectableChanged(bool selectable);
-  
-protected:
+public:
   /*!
     Represents negative and positive sign domain for passing to \ref getKeyRange and \ref getValueRange.
   */
@@ -1458,6 +1454,11 @@ protected:
                     ,sdBoth     ///< Both sign domains, including zero, i.e. all (rational) numbers
                     ,sdPositive ///< The positive sign domain, i.e. numbers greater than zero
                   };
+signals:
+  void selectionChanged(bool selected);
+  void selectableChanged(bool selectable);
+  
+protected:
   
   // property members:
   QString mName;
