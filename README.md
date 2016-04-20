@@ -12,7 +12,7 @@ Bindings for graphics lib QCustomPlot for PyQt5
   python3 configure.py
 
 ## Install:
-  Please libqcustomplot.so.1.0.0 to /usr/lib/pythonx/dist-packages/qcustomplot
+  Copy libqcustomplot.so.1.0.0 to /usr/lib/pythonx/dist-packages/qcustomplot/qcustomplot.so
 
 ## Check:
   in Python Interactive mode enter:
