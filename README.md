@@ -2,19 +2,20 @@
 Bindings for graphics lib QCustomPlot for PyQt5
 
 ## Requirements:
- - PyQt5 >= 5.0
+ - PyQt5
  - sip
  - qmake (for Qt5)
- - libpythonx.x
  - make
- 
-## Build:
-  python3 configure.py
+ - Linux operationg system
 
-## Install:
-  Copy libqcustomplot.so.1.0.0 to /usr/lib/pythonx/dist-packages/qcustomplot/qcustomplot.so
+## Build & install:
+  python setup.py build
+  sudo python setup.py install
 
-## Check:
-  in Python Interactive mode enter:
-  import qcustomplot
-  dir(qcustomplot)
+## Arguments for build_ext option:
+  --qmake -- Path to qmake for building QCustomPlot static library (defaults: /usr/bin/qmake)
+  --make -- Path to make utility (defaults: /usr/bin/make)
+
+## TODO:
+  * Autodetecting Qt5 installation (in current version we suppose Qt5 installation headers to /usr/include/qt)
+  * Windows building support
