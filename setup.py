@@ -9,6 +9,7 @@ import sipconfig
 
 DEFAULT_QMAKE = '/usr/bin/qmake'
 DEFAULT_MAKE = '/usr/bin/make'
+DEFAULT_QT_INCLUDE = '/usr/include/qt'
 ROOT = abspath(dirname(__file__))
 BUILD_STATIC_DIR = join(ROOT, 'lib-static')
 
@@ -17,12 +18,14 @@ class MyBuilderExt(build_ext):
     user_options = build_ext.user_options[:]
     user_options += [
         ('qmake=', None, 'Path to qmake'),
+        ('qt-include-dir', None, 'Path to qmake headers'),
         ('make=', None, 'Path to make')
     ]
 
     def initialize_options(self):
         build_ext.initialize_options(self)
         self.qmake = None
+        self.qt_include_dir = None
         self.make = None
         self.static_lib = None
         pyqt_sip_config = PYQT_CONFIGURATION['sip_flags']
@@ -39,6 +42,9 @@ class MyBuilderExt(build_ext):
         if self.make is None:
             print('Setting make to \'%s\'' % DEFAULT_MAKE)
             self.make = DEFAULT_MAKE
+        if self.qt_include_dir is None:
+            print('Setting Qt include dir to \'%s\'' % DEFAULT_QT_INCLUDE)
+            self.qt_include_dir = DEFAULT_QT_INCLUDE
 
     def __build_qcustomplot_library(self):
         qcustomplot_static = join(self.build_temp, 'libqcustomplot.a')
@@ -64,6 +70,12 @@ class MyBuilderExt(build_ext):
         except (AttributeError, ValueError):
             pass
         self.__build_qcustomplot_library()
+        # Possibly it's hack
+        qcustomplot_ext = self.extensions[0]
+        qcustomplot_ext.include_dirs += [
+            join(self.qt_include_dir, subdir)
+            for subdir in ['', 'QtCore', 'QtGui', 'QtWidgets', 'QtPrintSupport']
+        ]
         build_ext.build_extensions(self)
 
     def _sip_sipfiles_dir(self):
@@ -86,13 +98,7 @@ setup(
                              'Qt5Gui',
                              'Qt5Widgets',
                              'Qt5PrintSupport'],
-                  include_dirs=['lib',
-                                '/usr/include/qt',
-                                '/usr/include/qt/QtCore',
-                                '/usr/include/qt/QtGui',
-                                '/usr/include/qt/QtWidgets',
-                                '/usr/include/qt/QtPrintSupport'],
-                  ),
+                  include_dirs=['lib']),
     ],
     requires=[
         'sipconfig',
