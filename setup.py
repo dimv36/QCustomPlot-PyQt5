@@ -18,7 +18,7 @@ class MyBuilderExt(build_ext):
     user_options = build_ext.user_options[:]
     user_options += [
         ('qmake=', None, 'Path to qmake'),
-        ('qt-include-dir', None, 'Path to qmake headers'),
+        ('qt-include-dir=', None, 'Path to qmake headers'),
         ('make=', None, 'Path to make')
     ]
 
