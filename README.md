@@ -14,6 +14,7 @@ Bindings for graphics lib QCustomPlot for PyQt5
 ## Arguments for build_ext option:
   * --qmake -- Path to qmake for building QCustomPlot static library (defaults: /usr/bin/qmake)
   * --make -- Path to make utility (defaults: /usr/bin/make)
+  * --qt-include-dir -- Path to Qt's include location (defaults: /usr/include/qt)
 
 ## TODO:
   * Autodetecting Qt5 installation (in current version we suppose Qt5 installation headers to /usr/include/qt)
