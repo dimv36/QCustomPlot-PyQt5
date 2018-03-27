@@ -1,15 +1,21 @@
 import os
-from os.path import join, exists, abspath, dirname
-from distutils.sysconfig import customize_compiler
-from distutils.core import setup, Extension, DistutilsError
-from sipdistutils import build_ext
-from PyQt5.QtCore import PYQT_CONFIGURATION
+import subprocess
 import sipconfig
 
+from distutils.core import setup, Extension, DistutilsError
+from distutils.sysconfig import customize_compiler
+from os.path import join, exists, abspath, dirname
 
-DEFAULT_QMAKE = '/usr/bin/qmake'
+from sipdistutils import build_ext
+
+from PyQt5.QtCore import PYQT_CONFIGURATION
+from PyQt5.QtCore import QLibraryInfo
+
+
+QT_BINARIES = QLibraryInfo.location(QLibraryInfo.BinariesPath)
+DEFAULT_QMAKE = join(QT_BINARIES, "qmake")
 DEFAULT_MAKE = '/usr/bin/make'
-DEFAULT_QT_INCLUDE = '/usr/include/qt'
+DEFAULT_QT_INCLUDE = QLibraryInfo.location(QLibraryInfo.HeadersPath)
 ROOT = abspath(dirname(__file__))
 BUILD_STATIC_DIR = join(ROOT, 'lib-static')
 
@@ -43,8 +49,10 @@ class MyBuilderExt(build_ext):
             print('Setting make to \'%s\'' % DEFAULT_MAKE)
             self.make = DEFAULT_MAKE
         if self.qt_include_dir is None:
-            print('Setting Qt include dir to \'%s\'' % DEFAULT_QT_INCLUDE)
-            self.qt_include_dir = DEFAULT_QT_INCLUDE
+            pipe = subprocess.Popen([self.qmake, "-query", "QT_INSTALL_HEADERS"], stdout=subprocess.PIPE)
+            (stdout, stderr) = pipe.communicate()
+            self.qt_include_dir = str(stdout.strip(), 'utf8')
+            print('Setting Qt include dir to \'%s\'' % self.qt_include_dir)
 
     def __build_qcustomplot_library(self):
         qcustomplot_static = join(self.build_temp, 'libqcustomplot.a')
@@ -55,7 +63,7 @@ class MyBuilderExt(build_ext):
         os.makedirs(self.build_temp)
         os.chdir(self.build_temp)
         print('Make static qcustomplot library...')
-        self.spawn([self.qmake, join(ROOT, 'lib/qcustomplot-static.pro')])
+        self.spawn([self.qmake, join(ROOT, 'QCustomPlot/src/qcp-staticlib.pro')])
         self.spawn([self.make])
         os.chdir(ROOT)
         self.static_lib = qcustomplot_static
@@ -84,21 +92,21 @@ class MyBuilderExt(build_ext):
 
 setup(
     name='qcustomplot',
-    version='1.3.1-1',
+    version='2.0.0',
     description='QCustomPlot is a Qt C++ widget for plotting and data visualization',
-    author='Dmitry Voronin',
+    author='Dmitry Voronin, Giuseppe Corbelli',
     author_email='carriingfate92@yandex.ru',
     url='https://github.com/dimv36/QCustomPlot-PyQt5',
     platforms=['Linux'],
     license='MIT',
     ext_modules=[
         Extension('qcustomplot',
-                  ['qcustomplot.sip'],
+                  ['all.sip'],
                   libraries=['Qt5Core',
                              'Qt5Gui',
                              'Qt5Widgets',
                              'Qt5PrintSupport'],
-                  include_dirs=['lib']),
+                  include_dirs=['.']),
     ],
     requires=[
         'sipconfig',
