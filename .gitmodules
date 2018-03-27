@@ -1,0 +1,4 @@
+[submodule "QCustomPlot"]
+	path = QCustomPlot
+    url = https://gitlab.com/DerManu/QCustomPlot.git
+    branch = master
