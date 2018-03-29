@@ -1,10 +1,15 @@
+#!/usr/bin/python                                                                                                                                                                       
+# -*- coding: utf-8 -*-
 import os
 import subprocess
+
 import sipconfig
 
-from distutils.core import setup, Extension, DistutilsError
+from distutils.core import DistutilsError
 from distutils.sysconfig import customize_compiler
 from os.path import join, exists, abspath, dirname
+
+from setuptools import setup, Extension
 
 from sipdistutils import build_ext
 
@@ -82,8 +87,9 @@ class MyBuilderExt(build_ext):
         qcustomplot_ext = self.extensions[0]
         qcustomplot_ext.include_dirs += [
             join(self.qt_include_dir, subdir)
-            for subdir in ['', 'QtCore', 'QtGui', 'QtWidgets', 'QtPrintSupport']
+            for subdir in ['.', 'QtCore', 'QtGui', 'QtWidgets', 'QtPrintSupport']
         ]
+        qcustomplot_ext.library_dirs += [self.build_temp]
         build_ext.build_extensions(self)
 
     def _sip_sipfiles_dir(self):
@@ -105,7 +111,8 @@ setup(
                   libraries=['Qt5Core',
                              'Qt5Gui',
                              'Qt5Widgets',
-                             'Qt5PrintSupport'],
+                             'Qt5PrintSupport',
+                             'qcustomplot'],
                   include_dirs=['.']),
     ],
     requires=[
