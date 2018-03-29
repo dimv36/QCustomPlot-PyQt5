@@ -10,6 +10,10 @@ QCustomPlot Website/Contact: http://www.qcustomplot.com
 
 %Module qcustomplot
 
+%ModuleHeaderCode
+
+%End
+
 %Feature ENABLE
 
 %Import QtCore/QtCoremod.sip
@@ -36,7 +40,7 @@ QCustomPlot Website/Contact: http://www.qcustomplot.com
 //#include "axis/axistickerlog.h"
 %Include axis.sip
 %Include scatterstyle.sip
-//#include "datacontainer.h"
+//%Include datacontainer.sip
 %Include plottable.sip
 %Include item.sip
 %Include core.sip
