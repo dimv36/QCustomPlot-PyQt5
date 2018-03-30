@@ -8,13 +8,8 @@ QCustomPlot author: Emanuel Eichhammer
 QCustomPlot Website/Contact: http://www.qcustomplot.com
 %End
 
-%Module qcustomplot
+%Module QCustomPlot
 
-%ModuleHeaderCode
-
-%End
-
-%Feature ENABLE
 
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
