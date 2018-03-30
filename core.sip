@@ -1,3 +1,13 @@
+/** PyQt5 binding for QCustomPlot v2.0.0
+ *  
+ *  Authors: Dmitry Voronin, Giuseppe Corbelli
+ *  License: MIT
+ *  
+ *  QCustomPlot author: Emanuel Eichhammer
+ *  QCustomPlot Website/Contact: http://www.qcustomplot.com
+ */
+
+
 class QCustomPlot : public QWidget
 {
 %TypeHeaderCode
