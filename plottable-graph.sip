@@ -30,13 +30,15 @@ public:
   double value;
 };
 
-typedef QCPDataContainer<QCPGraphData> QCPGraphDataContainer;
 
-// Changed inheritance from QCPAbstractPlottable1D<QCPGraphData>
-class QCPGraph : public QCPAbstractPlottable
+typedef QCPAbstractPlottable1D<QCPGraphData> QCPAbstractPlottable1D_QCPGraphData;
+
+class QCPGraph : public QCPAbstractPlottable1D_QCPGraphData
 {
 %TypeHeaderCode
-#include <QCustomPlot/src/plottables/plottable-graph.h>
+#include <QCustomPlot/src/qcp.h>
+
+typedef QCPAbstractPlottable1D<QCPGraphData> QCPAbstractPlottable1D_QCPGraphData;
 %End
 public:
   enum LineStyle { lsNone        ///< data points are not connected with any lines (e.g. data only represented
@@ -77,4 +79,5 @@ public:
   // reimplemented virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
   virtual QCPRange getKeyRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth) const;
-  virtual QCPRange getValueRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth, const QCPRange &inKeyRange=QCPRange()) const;};
+  virtual QCPRange getValueRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth, const QCPRange &inKeyRange=QCPRange()) const;
+};
