@@ -65,13 +65,14 @@ public:
 };
 
 
-typedef QCPDataContainer<QCPBarsData> QCPBarsDataContainer;
+typedef QCPAbstractPlottable1D<QCPBarsData> QCPAbstractPlottable1D_QCPBarsData;
 
-// Changed inheritance from QCPAbstractPlottable1D<QCPBarsData>
-class QCPBars : public QCPAbstractPlottable
+class QCPBars : public QCPAbstractPlottable1D_QCPBarsData
 {
 %TypeHeaderCode
-#include <QCustomPlot/src/plottables/plottable-bars.h>
+#include <QCustomPlot/src/qcp.h>
+
+typedef QCPAbstractPlottable1D<QCPBarsData> QCPAbstractPlottable1D_QCPBarsData;
 %End
 public:
   enum WidthType { wtAbsolute       ///< Bar width is in absolute pixels
@@ -116,3 +117,5 @@ public:
   virtual QCPRange getValueRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth, const QCPRange &inKeyRange=QCPRange()) const;
   virtual QPointF dataPixelPosition(int index) const;
 };
+
+
