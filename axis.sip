@@ -71,8 +71,10 @@ public:
   ScaleType scaleType() const;
   const QCPRange range() const;
   bool rangeReversed() const;
-  // TODO: provide %MethodCode%
-  //QSharedPointer<QCPAxisTicker> ticker() const;
+  QCPAxisTicker* ticker() const;
+  %MethodCode
+    sipRes = sipCpp->ticker().data();
+  %End
   bool ticks() const;
   bool tickLabels() const;
   int tickLabelPadding() const;
@@ -119,9 +121,14 @@ public:
   void setRangeLower(double lower);
   void setRangeUpper(double upper);
   void setRangeReversed(bool reversed);
-  // TODO: provide %MethodCode%
-  //QSharedPointer<QCPAxisTicker> ticker() const;
-  //void setTicker(QSharedPointer<QCPAxisTicker> ticker);
+  void setTicker(QCPAxisTicker* ticker /Transfer/);
+  %Docstring(format = "deindented", signature = "prepended")
+    Set a new ticker on the axis. Ownership of the ticker is transferred to the axis
+    and cannot be taken back.
+  %End
+  %MethodCode
+    sipCpp->setTicker(QSharedPointer<QCPAxisTicker>(a0));
+  %End
   void setTicks(bool show);
   void setTickLabels(bool show);
   void setTickLabelPadding(int padding);
