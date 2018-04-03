@@ -26,9 +26,9 @@ QCustomPlot Website/Contact: http://www.qcustomplot.com
 %Include selectionrect.sip
 %Include layout.sip
 %Include lineending.sip
-//#include "axis/axisticker.h"
-//#include "axis/axistickerdatetime.h"
-//#include "axis/axistickertime.h"
+%Include axisticker.sip
+%Include axistickerdatetime.sip
+%Include axistickertime.sip
 //#include "axis/axistickerfixed.h"
 //#include "axis/axistickertext.h"
 //#include "axis/axistickerpi.h"
@@ -44,7 +44,7 @@ QCustomPlot Website/Contact: http://www.qcustomplot.com
 //#include "selectiondecorator-bracket.h"
 %Include layoutelement-axisrect.sip
 %Include layoutelement-legend.sip
-//#include "layoutelements/layoutelement-textelement.h"
+%Include layoutelement-textelement.sip
 //#include "layoutelements/layoutelement-colorscale.h"
 %Include plottable-graph.sip
 //#include "plottables/plottable-curve.h"
