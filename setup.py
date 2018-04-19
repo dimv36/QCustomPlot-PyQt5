@@ -1,6 +1,7 @@
-#!/usr/bin/python                                                                                                                                                                       
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os
+import platform
 import subprocess
 
 import sipconfig
@@ -17,9 +18,18 @@ from PyQt5.QtCore import PYQT_CONFIGURATION
 from PyQt5.QtCore import QLibraryInfo
 
 
+WINDOWS_HOST = (platform.system() == 'Windows')
+LINUX_HOST = (platform.system() == 'Linux')
+
+# This is with Unix pathsep even on windows
 QT_BINARIES = QLibraryInfo.location(QLibraryInfo.BinariesPath)
-DEFAULT_QMAKE = join(QT_BINARIES, "qmake")
-DEFAULT_MAKE = '/usr/bin/make'
+if WINDOWS_HOST:
+    # Default to MSVC nmake
+    DEFAULT_MAKE = 'jom.exe'
+    DEFAULT_QMAKE = "{}/{}".format(QT_BINARIES, "qmake.exe")
+else:
+    DEFAULT_MAKE = 'make'
+    DEFAULT_QMAKE = "{}/{}".format(QT_BINARIES, "qmake")
 DEFAULT_QT_INCLUDE = QLibraryInfo.location(QLibraryInfo.HeadersPath)
 ROOT = abspath(dirname(__file__))
 BUILD_STATIC_DIR = join(ROOT, 'lib-static')
@@ -29,7 +39,8 @@ class MyBuilderExt(build_ext):
     user_options = build_ext.user_options[:]
     user_options += [
         ('qmake=', None, 'Path to qmake'),
-        ('qt-include-dir=', None, 'Path to qmake headers'),
+        ('qt-include-dir=', None, 'Path to Qt headers'),
+        ('qt-library-dir=', None, 'Path to Qt library dir (used at link time)'),
         ('make=', None, 'Path to make')
     ]
 
@@ -37,6 +48,7 @@ class MyBuilderExt(build_ext):
         build_ext.initialize_options(self)
         self.qmake = None
         self.qt_include_dir = None
+        self.qt_library_dir = None
         self.make = None
         self.static_lib = None
         pyqt_sip_config = PYQT_CONFIGURATION['sip_flags']
@@ -59,13 +71,24 @@ class MyBuilderExt(build_ext):
             self.qt_include_dir = str(stdout.strip(), 'utf8')
             print('Setting Qt include dir to \'%s\'' % self.qt_include_dir)
 
-    def __build_qcustomplot_library(self):
-        qcustomplot_static = join(self.build_temp, 'libqcustomplot.a')
-        if exists(qcustomplot_static):
-            return
+        if self.qt_library_dir is None:
+            pipe = subprocess.Popen([self.qmake, "-query", "QT_INSTALL_LIBS"], stdout=subprocess.PIPE)
+            (stdout, stderr) = pipe.communicate()
+            self.qt_library_dir = str(stdout.strip(), 'utf8')
+            print('Setting Qt library dir to \'%s\'' % self.qt_library_dir)
+
         if not exists(self.qmake):
             raise DistutilsError('Could not determine valid qmake at %s' % self.qmake)
-        os.makedirs(self.build_temp)
+
+    def __build_qcustomplot_library(self):
+        if WINDOWS_HOST:
+            qcustomplot_static = join(self.build_temp, 'release', 'qcustomplot.lib')
+        else:
+            qcustomplot_static = join(self.build_temp, 'libqcustomplot.a')
+        if exists(qcustomplot_static):
+            return
+
+        os.makedirs(self.build_temp, exist_ok=True)
         os.chdir(self.build_temp)
         print('Make static qcustomplot library...')
         self.spawn([self.qmake, join(ROOT, 'QCustomPlot/src/qcp-staticlib.pro')])
@@ -89,7 +112,23 @@ class MyBuilderExt(build_ext):
             join(self.qt_include_dir, subdir)
             for subdir in ['.', 'QtCore', 'QtGui', 'QtWidgets', 'QtPrintSupport']
         ]
-        qcustomplot_ext.library_dirs += [self.build_temp]
+        qcustomplot_ext.library_dirs += [
+            self.build_temp,
+            self.qt_library_dir
+        ]
+
+        qcustomplot_ext.libraries = [
+            'Qt5Core',
+            'Qt5Gui',
+            'Qt5Widgets',
+            'Qt5PrintSupport',
+            'qcustomplot'
+        ]
+
+        if WINDOWS_HOST:
+            qcustomplot_ext.library_dirs.append(join(self.build_temp, 'release'))
+            qcustomplot_ext.libraries.append('Opengl32')
+
         build_ext.build_extensions(self)
 
     def _sip_sipfiles_dir(self):
@@ -106,14 +145,11 @@ setup(
     platforms=['Linux'],
     license='MIT',
     ext_modules=[
-        Extension('QCustomPlot',
-                  ['all.sip'],
-                  libraries=['Qt5Core',
-                             'Qt5Gui',
-                             'Qt5Widgets',
-                             'Qt5PrintSupport',
-                             'qcustomplot'],
-                  include_dirs=['.']),
+        Extension(
+            'QCustomPlot',
+            ['all.sip'],
+            include_dirs=['.']
+        ),
     ],
     requires=[
         'sipconfig',
