@@ -46,6 +46,8 @@ class QCPBarsData
 {
 %TypeHeaderCode
 #include <QCustomPlot/src/plottables/plottable-bars.h>
+
+typedef QCPAbstractPlottable1D<QCPBarsData> QCPAbstractPlottable1D_QCPBarsData;
 %End
 public:
   QCPBarsData();
