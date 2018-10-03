@@ -7,6 +7,7 @@ import subprocess
 import sipconfig
 
 from distutils.core import DistutilsError
+from distutils.ccompiler import CCompiler
 from distutils.sysconfig import customize_compiler
 from os.path import join, exists, abspath, dirname
 
@@ -16,6 +17,23 @@ from sipdistutils import build_ext
 
 from PyQt5.QtCore import PYQT_CONFIGURATION
 from PyQt5.QtCore import QLibraryInfo
+
+# monkey-patch for parallel compilation, see
+# https://stackoverflow.com/questions/11013851/speeding-up-build-process-with-distutils
+def parallelCCompile(self, sources, output_dir=None, macros=None, include_dirs=None, debug=0, extra_preargs=None, extra_postargs=None, depends=None):
+    # those lines are copied from distutils.ccompiler.CCompiler directly
+    macros, objects, extra_postargs, pp_opts, build = self._setup_compile(output_dir, macros, include_dirs, sources, depends, extra_postargs)
+    cc_args = self._get_cc_args(pp_opts, debug, extra_preargs)
+    # parallel code
+    N = os.cpu_count() # number of parallel compilations
+    import multiprocessing.pool
+    def _single_compile(obj):
+        try: src, ext = build[obj]
+        except KeyError: return
+        self._compile(obj, src, ext, cc_args, extra_postargs, pp_opts)
+    # convert to list, imap is evaluated on-demand
+    list(multiprocessing.pool.ThreadPool(N).imap(_single_compile,objects))
+    return objects
 
 
 WINDOWS_HOST = (platform.system() == 'Windows')
@@ -30,9 +48,13 @@ if WINDOWS_HOST:
 else:
     DEFAULT_MAKE = 'make'
     DEFAULT_QMAKE = "{}/{}".format(QT_BINARIES, "qmake")
+
 DEFAULT_QT_INCLUDE = QLibraryInfo.location(QLibraryInfo.HeadersPath)
 ROOT = abspath(dirname(__file__))
 BUILD_STATIC_DIR = join(ROOT, 'lib-static')
+
+# Monkey-patch, see above
+CCompiler.compile=parallelCCompile
 
 
 class MyBuilderExt(build_ext):
@@ -41,7 +63,7 @@ class MyBuilderExt(build_ext):
         ('qmake=', None, 'Path to qmake'),
         ('qt-include-dir=', None, 'Path to Qt headers'),
         ('qt-library-dir=', None, 'Path to Qt library dir (used at link time)'),
-        ('make=', None, 'Path to make')
+        ('make=', None, 'Path to make (either GNU make/nmake/jom)')
     ]
 
     def initialize_options(self):
@@ -92,7 +114,13 @@ class MyBuilderExt(build_ext):
         os.chdir(self.build_temp)
         print('Make static qcustomplot library...')
         self.spawn([self.qmake, join(ROOT, 'QCustomPlot/src/qcp-staticlib.pro')])
-        self.spawn([self.make])
+        # AFAIK only nmake does not support -j option
+        has_multiprocess = not(WINDOWS_HOST and "nmake"in self.make)
+        make_cmdline = [self.make]
+        if has_multiprocess:
+            make_cmdline.extend(['-j', str(os.cpu_count())])
+        self.spawn([self.make, '-j', str(os.cpu_count())])
+
         os.chdir(ROOT)
         self.static_lib = qcustomplot_static
         # Possibly it's hack
@@ -137,7 +165,7 @@ class MyBuilderExt(build_ext):
 
 setup(
     name='QCustomPlot',
-    version='2.0.0',
+    version='2.0.1',
     description='QCustomPlot is a PyQt5 widget for plotting and data visualization',
     author='Dmitry Voronin, Giuseppe Corbelli',
     author_email='carriingfate92@yandex.ru',
