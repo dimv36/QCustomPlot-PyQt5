@@ -11,9 +11,8 @@
 
 import math
 
-from PyQt5 import Qt
-from PyQt5.QtCore import QTimer
-from PyQt5.QtGui import QPen, QBrush, QColor
+from PyQt5.QtCore import QTimer, QPointF, Qt
+from PyQt5.QtGui import QPen, QBrush, QColor, QRadialGradient
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
@@ -38,7 +37,7 @@ class MainWindow(QMainWindow):
 #             8: self.setupMultiAxisDemo,
 #             9: self.setupLogarithmicDemo,
 #             10: self.setupRealtimeDataDemo,
-#             11: self.setupParametricCurveDemo,
+            11: self.setupParametricCurveDemo,
 #             12: self.setupBarChartDemo,
 #             13: self.setupStatisticalDemo,
 #             14: self.setupSimpleItemDemo,
@@ -100,9 +99,9 @@ class MainWindow(QMainWindow):
         y0 = [0.0] * 251
         y1 = [0.0] * 251
         for i in range(0, 251):
-             x[i] = float(i)
-             y0[i] = pow(math.e, -i/150.0) * math.cos(i/10.0)  # exponentially decaying cosine
-             y1[i] = pow(math.e, -i/150.0)  # exponential envelope
+            x[i] = float(i)
+            y0[i] = pow(math.e, -i/150.0) * math.cos(i/10.0)  # exponentially decaying cosine
+            y1[i] = pow(math.e, -i/150.0)  # exponential envelope
 
         # configure right and top axis to show ticks but no labels:
         # (see QCPAxisRect::setupFullAxesBox for a quicker method to do this)
@@ -124,6 +123,7 @@ class MainWindow(QMainWindow):
         # Allow user to drag axis ranges with mouse, zoom with mouse wheel and select graphs by clicking:
         # TODO: figure out how to skip the explicit intermediate QCP.Interactions
         self.customPlot.setInteractions(QCustomPlot.QCP.Interactions(QCP.iRangeDrag | QCP.iRangeZoom | QCP.iSelectPlottables))
+
 #   void setupSincScatterDemo(QCustomPlot *customPlot);
 #   void setupScatterStyleDemo(QCustomPlot *customPlot);
 #   void setupLineStyleDemo(QCustomPlot *customPlot);
@@ -133,7 +133,53 @@ class MainWindow(QMainWindow):
 #   void setupMultiAxisDemo(QCustomPlot *customPlot);
 #   void setupLogarithmicDemo(QCustomPlot *customPlot);
 #   void setupRealtimeDataDemo(QCustomPlot *customPlot);
-#   void setupParametricCurveDemo(QCustomPlot *customPlot);
+
+    def setupParametricCurveDemo(self):
+        self.demoName = "Parametric Curves Demo"
+
+        # create empty curve objects. As they are not adopted by main QCustomPlot an explicit
+        # reference must be kept
+        self.fermatSpiral1 = QCustomPlot.QCPCurve(self.customPlot.xAxis, self.customPlot.yAxis)
+        self.fermatSpiral2 = QCustomPlot.QCPCurve(self.customPlot.xAxis, self.customPlot.yAxis)
+        self.deltoidRadial = QCustomPlot.QCPCurve(self.customPlot.xAxis, self.customPlot.yAxis)
+        # generate the curve data points:
+        pointCount = 501
+        dataSpiral1 = [[0.0] * pointCount, [0.0] * pointCount, [0.0] * pointCount]
+        dataSpiral2 = [[0.0] * pointCount, [0.0] * pointCount, [0.0] * pointCount]
+        dataDeltoid = [[0.0] * pointCount, [0.0] * pointCount, [0.0] * pointCount]
+        for i in range(0, pointCount):
+            phi = i/(pointCount-1) * 8 * math.pi
+            theta = i/(pointCount-1) * 2 * math.pi
+            dataSpiral1[0][i] = float(i)
+            dataSpiral1[1][i] = math.sqrt(phi) * math.cos(phi)
+            dataSpiral1[2][i] = math.sqrt(phi) * math.sin(phi)
+            dataSpiral2[0][i] = float(i)
+            dataSpiral2[1][i] = -dataSpiral1[1][i]
+            dataSpiral2[2][i] = -dataSpiral1[2][i]
+            dataDeltoid[0][i] = float(i)
+            dataDeltoid[1][i] = 2 * math.cos(2*theta) + math.cos(1*theta) + 2 * math.sin(theta)
+            dataDeltoid[2][i] = 2 * math.sin(2*theta) - math.sin(1*theta)
+
+        # pass the data to the curves; we know t (i in loop above) is ascending, so set alreadySorted=true (saves an extra internal sort):
+        self.fermatSpiral1.setData(dataSpiral1[0], dataSpiral1[1], dataSpiral1[2], True)
+        self.fermatSpiral2.setData(dataSpiral2[0], dataSpiral2[1], dataSpiral2[2], True)
+        self.deltoidRadial.setData(dataDeltoid[0], dataDeltoid[1], dataDeltoid[2], True)
+        # color the curves:
+        self.fermatSpiral1.setPen(QPen(Qt.blue))
+        self.fermatSpiral1.setBrush(QBrush(QColor(0, 0, 255, 20)))
+        self.fermatSpiral2.setPen(QPen(QColor(255, 120, 0)))
+        self.fermatSpiral2.setBrush(QBrush(QColor(255, 120, 0, 30)))
+        radialGrad = QRadialGradient(QPointF(310, 180), 200)
+        radialGrad.setColorAt(0, QColor(170, 20, 240, 100))
+        radialGrad.setColorAt(0.5, QColor(20, 10, 255, 40))
+        radialGrad.setColorAt(1, QColor(120, 20, 240, 10))
+        self.deltoidRadial.setPen(QPen(QColor(170, 20, 240)))
+        self.deltoidRadial.setBrush(QBrush(radialGrad))
+        # set some basic customPlot config:
+        self.customPlot.setInteractions(QCustomPlot.QCP.Interactions(QCustomPlot.QCP.iRangeDrag | QCustomPlot.QCP.iRangeZoom | QCustomPlot.QCP.iSelectPlottables))
+        self.customPlot.axisRect().setupFullAxesBox()
+        self.customPlot.rescaleAxes()
+
 #   void setupBarChartDemo(QCustomPlot *customPlot);
 #   void setupStatisticalDemo(QCustomPlot *customPlot);
 #   void setupSimpleItemDemo(QCustomPlot *customPlot);

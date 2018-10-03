@@ -47,7 +47,7 @@ QCustomPlot Website/Contact: http://www.qcustomplot.com
 %Include layoutelement-textelement.sip
 //#include "layoutelements/layoutelement-colorscale.h"
 %Include plottable-graph.sip
-//#include "plottables/plottable-curve.h"
+%Include plottable-curve.sip
 %Include plottable-bars.sip
 //#include "plottables/plottable-statisticalbox.h"
 //#include "plottables/plottable-colormap.h"
