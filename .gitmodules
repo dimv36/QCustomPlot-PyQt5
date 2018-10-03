@@ -1,4 +1,4 @@
 [submodule "QCustomPlot"]
 	path = QCustomPlot
     url = https://gitlab.com/Corbelli/QCustomPlot.git
-    branch = master
+    branch = v2.0.1
