@@ -45,7 +45,8 @@ public:
                    ,lsLine ///< Data points are connected with a straight line
                  };
 
-  explicit QCPCurve(QCPAxis *keyAxis, QCPAxis *valueAxis);
+  // Ownership acquired by QCustomPlot tied to the axis
+  explicit QCPCurve(QCPAxis *keyAxis, QCPAxis *valueAxis) /Transfer/;
   virtual ~QCPCurve();
 
   // getters:
