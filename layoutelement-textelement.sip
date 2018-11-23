@@ -15,10 +15,10 @@ class QCPTextElement : public QCPLayoutElement /NoDefaultCtors/
 %End
 public:
   explicit QCPTextElement(QCustomPlot *parentPlot);
-  QCPTextElement(QCustomPlot *parentPlot, const QString &text);
-  QCPTextElement(QCustomPlot *parentPlot, const QString &text, double pointSize);
-  QCPTextElement(QCustomPlot *parentPlot, const QString &text, const QString &fontFamily, double pointSize);
-  QCPTextElement(QCustomPlot *parentPlot, const QString &text, const QFont &font);
+  QCPTextElement(QCustomPlot *parentPlot /TransferThis/, const QString &text);
+  QCPTextElement(QCustomPlot *parentPlot /TransferThis/, const QString &text, double pointSize);
+  QCPTextElement(QCustomPlot *parentPlot /TransferThis/, const QString &text, const QString &fontFamily, double pointSize);
+  QCPTextElement(QCustomPlot *parentPlot /TransferThis/, const QString &text, const QFont &font);
 
   // getters:
   QString text() const;
