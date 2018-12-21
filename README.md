@@ -4,9 +4,10 @@ Bindings for graphics lib QCustomPlot for PyQt5.
 ## Requirements:
   - PyQt5
   - sip
-  - qmake (for Qt5)
-  - make
-  - Linux operationg system
+  - qmake (Qt5)
+  - make/nmake/jom
+  - Linux/Windows operating systems
+  - gcc/msvc compilers
 
 ## Build & install:
 Currently QCustomPlot is statically linked and downloaded as GIT submodule.
@@ -22,3 +23,4 @@ Currently QCustomPlot is statically linked and downloaded as GIT submodule.
 ## TODO:
   - No debug builds are currently supported
   - Test on other than Linux & Windows systems
+  - Test on compilers other than gcc/MSVC and specify minimum versions
