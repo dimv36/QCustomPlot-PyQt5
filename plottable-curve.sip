@@ -75,4 +75,12 @@ public:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
   virtual QCPRange getKeyRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth) const;
   virtual QCPRange getValueRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth, const QCPRange &inKeyRange=QCPRange()) const;
+
+    //! This is not in QCustomPlot, but I found it handy
+  Q_SLOT void setSelected();
+%MethodCode
+    Py_BEGIN_ALLOW_THREADS
+    sipCpp->setSelection(QCPDataSelection(sipCpp->data()->dataRange()));
+    Py_END_ALLOW_THREADS
+%End
 };
