@@ -82,10 +82,16 @@ public:
   virtual QCPRange getValueRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth, const QCPRange &inKeyRange=QCPRange()) const;
 
   //! This is not in QCustomPlot, but I found it handy
-  Q_SLOT void setSelected();
+  Q_SLOT void setSelected(bool selected);
 %MethodCode
     Py_BEGIN_ALLOW_THREADS
-    sipCpp->setSelection(QCPDataSelection(sipCpp->data()->dataRange()));
+    QCPDataSelection current_selection = sipCpp->selection();
+    if (a0)
+        current_selection += sipCpp->data()->dataRange();
+    else
+        current_selection.clear();
+
+    sipCpp->setSelection(current_selection);
     Py_END_ALLOW_THREADS
 %End
 };
