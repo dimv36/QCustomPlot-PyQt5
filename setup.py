@@ -118,8 +118,9 @@ class MyBuilderExt(build_ext):
         has_multiprocess = not(WINDOWS_HOST and "nmake"in self.make)
         make_cmdline = [self.make]
         if has_multiprocess:
-            make_cmdline.extend(['-j', str(os.cpu_count())])
-        self.spawn([self.make, '-j', str(os.cpu_count())])
+            make_cmdline.extend(('-j', str(os.cpu_count())))
+        make_cmdline.append('release')
+        self.spawn(make_cmdline)
 
         os.chdir(ROOT)
         self.static_lib = qcustomplot_static
