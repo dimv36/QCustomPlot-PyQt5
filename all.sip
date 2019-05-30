@@ -28,9 +28,9 @@ QCustomPlot Website/Contact: http://www.qcustomplot.com
 %Include lineending.sip
 %Include axisticker.sip
 %Include axistickerdatetime.sip
+%Include axistickertext.sip
 %Include axistickertime.sip
 //#include "axis/axistickerfixed.h"
-//#include "axis/axistickertext.h"
 //#include "axis/axistickerpi.h"
 //#include "axis/axistickerlog.h"
 %Include axis.sip
