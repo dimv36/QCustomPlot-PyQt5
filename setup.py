@@ -166,7 +166,7 @@ class MyBuilderExt(build_ext):
 
 setup(
     name='QCustomPlot',
-    version='2.0.2',
+    version='2.0.3',
     description='QCustomPlot is a PyQt5 widget for plotting and data visualization',
     author='Dmitry Voronin, Giuseppe Corbelli',
     author_email='carriingfate92@yandex.ru',
