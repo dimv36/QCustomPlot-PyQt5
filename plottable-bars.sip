@@ -76,13 +76,15 @@ class QCPBars : public QCPAbstractPlottable1D_QCPBarsData
 
 typedef QCPAbstractPlottable1D<QCPBarsData> QCPAbstractPlottable1D_QCPBarsData;
 %End
+
 public:
   enum WidthType { wtAbsolute       ///< Bar width is in absolute pixels
                    ,wtAxisRectRatio ///< Bar width is given by a fraction of the axis rect size
                    ,wtPlotCoords    ///< Bar width is in key coordinates and thus scales with the key axis range
                  };
 
-  explicit QCPBars(QCPAxis *keyAxis, QCPAxis *valueAxis);
+  // TODO: Technically ownership is trasferred to keyAxis->parentPlot()
+  explicit QCPBars(QCPAxis *keyAxis /TransferThis/, QCPAxis *valueAxis);
   virtual ~QCPBars();
 
   // getters:
