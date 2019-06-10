@@ -1,7 +1,7 @@
 // QMap<double, T> is implemented as a Python dictionary.
 
 template<int, _TYPE_>
-%MappedType QMap<double, _TYPE_> /TypeHint="Dict[int, _TYPE_]", TypeHintValue="{}"/
+%MappedType QMap<double, _TYPE_> /TypeHint="Dict[float, _TYPE_]", TypeHintValue="{}"/
 {
 %TypeHeaderCode
 #include <qmap.h>
