@@ -71,7 +71,7 @@ public:
   void setValueAxis(QCPAxis *axis);
   Q_SLOT void setSelectable(QCP::SelectionType selectable);
   Q_SLOT void setSelection(QCPDataSelection selection);
-  void setSelectionDecorator(QCPSelectionDecorator *decorator);
+  void setSelectionDecorator(QCPSelectionDecorator *decorator /Transfer/);
 
   // introduced virtual methods:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const = 0;

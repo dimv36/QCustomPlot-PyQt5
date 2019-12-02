@@ -45,7 +45,8 @@ public:
                    ,lsLine ///< Data points are connected with a straight line
                  };
 
-  explicit QCPCurve(QCPAxis *keyAxis, QCPAxis *valueAxis);
+  // Ownership acquired by QCustomPlot tied to the axis
+  explicit QCPCurve(QCPAxis *keyAxis, QCPAxis *valueAxis) /Transfer/;
   virtual ~QCPCurve();
 
   // getters:
@@ -74,4 +75,18 @@ public:
   virtual double selectTest(const QPointF &pos, bool onlySelectable, QVariant *details=0) const;
   virtual QCPRange getKeyRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth) const;
   virtual QCPRange getValueRange(bool &foundRange, QCP::SignDomain inSignDomain=QCP::sdBoth, const QCPRange &inKeyRange=QCPRange()) const;
+
+  //! This is not in QCustomPlot, but I found it handy
+  Q_SLOT void setSelected(bool selected);
+%MethodCode
+    Py_BEGIN_ALLOW_THREADS
+    QCPDataSelection current_selection = sipCpp->selection();
+    if (a0)
+        current_selection += sipCpp->data()->dataRange();
+    else
+        current_selection.clear();
+
+    sipCpp->setSelection(current_selection);
+    Py_END_ALLOW_THREADS
+%End
 };
