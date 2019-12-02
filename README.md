@@ -1,21 +1,24 @@
 # QCustomPlot-PyQt5
-Bindings for graphics lib QCustomPlot for PyQt5
+Bindings for graphics lib QCustomPlot for PyQt5.
 
 ## Requirements:
- - PyQt5
- - sip
- - qmake (for Qt5)
- - make
- - Linux operationg system
+  - PyQt5
+  - sip
+  - qmake (for Qt5)
+  - make
+  - Linux operationg system
 
 ## Build & install:
-  python setup.py build && sudo python setup.py install
+Currently QCustomPlot is statically linked and downloaded as GIT submodule.
+
+  - git submodule update --init
+  - python setup.py build && sudo python setup.py install
 
 ## Arguments for build_ext option:
-  * --qmake -- Path to qmake for building QCustomPlot static library (defaults: /usr/bin/qmake)
-  * --make -- Path to make utility (defaults: /usr/bin/make)
-  * --qt-include-dir -- Path to Qt's include location (defaults: /usr/include/qt)
+  * --qmake -- Path to qmake for building QCustomPlot static library (default: detected from PyQt5 installation)
+  * --make -- Path to make utility (default: nmake.exe on Windows, make elsewhere)
+  * --qt-include-dir -- Path to Qt's include location (default: detected from PyQt5 installation)
 
 ## TODO:
-  * Autodetecting Qt5 installation (in current version we suppose Qt5 installation headers to /usr/include/qt)
-  * Windows building support
+  - No debug builds are currently supported
+  - Test on other than Linux & Windows systems
